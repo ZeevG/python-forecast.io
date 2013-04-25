@@ -30,7 +30,7 @@ class ForcastioDataBlock():
 
 class ForcastioDataPoint():
 
-    def __init__(self, d):
+    def __init__(self, d=None):
         
 
         try:
@@ -112,14 +112,14 @@ class Forcastio():
             return {'success': False, 'url':baseURL, 'response':e}
         
 
-    def getCurrent(self):
+    def getCurrently(self):
         try:
             if 'currently' not in self.json:
                 response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,hourly,daily,alerts,flags'))
                 self.json['currently'] = response['currently']
-            return ForcastioDataBlock(self.json['currently'])
+            return ForcastioDataPoint(self.json['currently'])
         except:
-            return ForcastioDataBlock()        
+            return ForcastioDataPoint()        
 
     def getMinutely(self):
         try:
