@@ -1,9 +1,7 @@
 try: import simplejson as json
 except ImportError: import json
 
-import datetime
-
-import urllib2
+import datetime, time as Time, urllib2
 
 class ForcastioDataBlock():
 
@@ -92,11 +90,16 @@ class Forcastio():
         self.json = None
 
 
-    def loadForcast(self, inLat, inLong, inTime=None, lazy=True):
+    def loadForcast(self, inLat, inLong, time=None, units="auto", lazy=True):
         self.lat = inLat
         self.long = inLong
-        self.time = inTime
-        self.url = self.baseURL+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units=si'
+        self.time = time
+
+        if self.time is None:
+            self.url = self.baseURL+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units='+units
+        else:
+            self.url = self.baseURL+str(self.key)+'/'+str(self.lat)+','+str(self.long)+','+str(int(Time.mktime(self.time.timetuple())))+'?units='+units
+
         try:
             if lazy == True:
                 baseURL = self.url + '&exclude=minutely,currently,hourly,daily,alerts,flags'
