@@ -24,6 +24,8 @@ class ForcastioDataBlock():
     def __unicode__(self):
         return "<ForcastioDataBlock instance: "+self.summary +" with "+str(self.data.__len__())+" DataPoints>"
 
+    def __str__(self):
+        return unicode(self).encode('utf-8')
 
 
 class ForcastioDataPoint():
@@ -47,9 +49,74 @@ class ForcastioDataPoint():
             self.summary = None
 
         try:
+            self.sunriseTime = datetime.datetime.fromtimestamp(int(d['sunriseTime']))
+        except:
+            self.sunriseTime = None
+
+        try:
+            self.sunsetTime = datetime.datetime.fromtimestamp(int(d['sunsetTime']))
+        except:
+            self.sunsetTime = None
+
+        try:
+            self.precipIntensity = d['precipIntensity']
+        except:
+            self.precipIntensity = None
+
+        try:
+            self.precipIntensityMax = d['precipIntensityMax']
+        except:
+            self.precipIntensityMax = None
+
+        try:
+            self.precipIntensityMaxTime = d['precipIntensityMaxTime']
+        except:
+            self.precipIntensityMaxTime = None
+
+        try:
+            self.precipProbablility = d['precipProbablility']
+        except:
+            self.precipProbablility = None
+
+        try:
+            self.precipType = d['precipType']
+        except:
+            self.precipType = None
+
+        try:
+            self.precipAccumulation = d['precipAccumulation']
+        except:
+            self.precipAccumulation = None
+
+        try:
             self.temperature = d['temperature']
         except:
             self.temperature = None
+
+        try:
+            self.temperatureMin = d['temperatureMin']
+        except:
+            self.temperatureMin = None
+
+        try:
+            self.temperatureMinTime = d['temperatureMinTime']
+        except:
+            self.temperatureMinTime = None
+
+        try:
+            self.temperatureMax = d['temperatureMax']
+        except:
+            self.temperatureMax = None
+
+        try:
+            self.temperatureMaxTime = d['temperatureMaxTime']
+        except:
+            self.temperatureMaxTime = None
+
+        try:
+            self.dewPoint = d['dewPoint']
+        except:
+            self.dewPoint = None
 
         try:
             self.windspeed = d['windSpeed']
@@ -71,6 +138,23 @@ class ForcastioDataPoint():
         except:
             self.humidity = None
 
+        try:
+            self.pressure = d['pressure']
+        except:
+            self.pressure = None
+
+        try:
+            self.visbility = d['visbility']
+        except:
+            self.visbility = None
+
+        try:
+            self.ozone = d['ozone']
+        except:
+            self.ozone = None
+
+        
+
     
     def __unicode__(self):
         return "<ForcastioDataPoint instance: "+self.summary +" at "+str(self.time)+">"
@@ -86,19 +170,29 @@ class Forcastio():
         self.key = inKey
         self.lat = None
         self.long = None
-        self.baseURL = 'https://api.forecast.io/forecast/'
+        self.url = 'https://api.forecast.io/forecast/'
         self.json = None
 
 
     def loadForcast(self, inLat, inLong, time=None, units="auto", lazy=True):
+        """
+            This function builds the request url and loads some or all of the needed json depending on lazy is True
+
+            inLat: The latitude of the forcast
+            inLong: The longitude of the forcast
+            time: A datetime.datetime object representing the desired time of the forcast
+            units: A string of the preferred units of measurement, "auto" id default. also us,ca,uk,si is available
+            lazy: Defaults to true.  The function will only request the json data as it is needed.
+                Results in more requests, but probably a faster response time (I haven't checked)
+        """
         self.lat = inLat
         self.long = inLong
         self.time = time
 
         if self.time is None:
-            self.url = self.baseURL+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units='+units
+            self.url = self.url+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units='+units
         else:
-            self.url = self.baseURL+str(self.key)+'/'+str(self.lat)+','+str(self.long)+','+str(int(Time.mktime(self.time.timetuple())))+'?units='+units
+            self.url = self.url+str(self.key)+'/'+str(self.lat)+','+str(self.long)+','+str(int(Time.mktime(self.time.timetuple())))+'?units='+units
 
         try:
             if lazy == True:
@@ -108,9 +202,9 @@ class Forcastio():
             self.json = json.load(urllib2.urlopen(baseURL))
             return {'success': True, 'url':baseURL, 'response':self.json}
         except urllib2.HTTPError, e:
-            return {'success': False, 'url':baseURL, 'response':e.code}
+            return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
         except urllib2.URLError, e:
-            return {'success': False, 'url':baseURL, 'response':e.reason}
+            return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
         except Exception, e:
             return {'success': False, 'url':baseURL, 'response':e}
         
