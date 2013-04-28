@@ -12,7 +12,7 @@ class Forcastio():
         self.key = inKey
         self.lat = None
         self.long = None
-        self.url = 'https://api.forecast.io/forecast/'
+        self.url = None
         self.json = None
 
 
@@ -32,15 +32,17 @@ class Forcastio():
         self.time = time
 
         if self.time is None:
-            self.url = self.url+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units='+units
+            self.url = 'https://api.forecast.io/forecast/'+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units='+units
         else:
-            self.url = self.url+str(self.key)+'/'+str(self.lat)+','+str(self.long)+','+str(int(Time.mktime(self.time.timetuple())))+'?units='+units
+            self.url = 'https://api.forecast.io/forecast/'+str(self.key)+'/'+str(self.lat)+','+str(self.long)+','+str(int(Time.mktime(self.time.timetuple())))+'?units='+units
+
+        if lazy == True:
+                baseURL = self.url + '&exclude=minutely,currently,hourly,daily,alerts,flags'
+        else:
+                baseURL = self.url
+        
 
         try:
-            if lazy == True:
-                baseURL = self.url + '&exclude=minutely,currently,hourly,daily,alerts,flags'
-            else:
-                baseURL = self.url
             self.json = json.load(urllib2.urlopen(baseURL))
             return {'success': True, 'url':baseURL, 'response':self.json}
         except urllib2.HTTPError, e:
