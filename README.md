@@ -22,8 +22,7 @@ Use the `forecast.getDataBlockType()` eg. `getCurrently()`, `getDaily()`, `getHo
 
 These functions return a DataBlock. Except `getCurrently()` which returns a DataPoint.
 
-Unless you call loadForecast() with lazy=False, these methods are lazy.  They will retrieve the needed data when they are first called.
-
+If you call loadForecast() with lazy=True, this class will request the data only as it is needed.  This should speed up response times.
 
 ```python
 byHour = forecast.getHourly()
