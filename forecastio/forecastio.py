@@ -5,7 +5,7 @@ import datetime, time as Time, urllib2
 
 
 
-class Forcastio():
+class Forecastio():
 
 
     def __init__(self, inKey):
@@ -16,13 +16,13 @@ class Forcastio():
         self.json = None
 
 
-    def loadForcast(self, inLat, inLong, time=None, units="auto", lazy=False):
+    def loadForecast(self, inLat, inLong, time=None, units="auto", lazy=False):
         """
             This function builds the request url and loads some or all of the needed json depending on lazy is True
 
-            inLat: The latitude of the forcast
-            inLong: The longitude of the forcast
-            time: A datetime.datetime object representing the desired time of the forcast
+            inLat: The latitude of the forecast
+            inLong: The longitude of the forecast
+            time: A datetime.datetime object representing the desired time of the forecast
             units: A string of the preferred units of measurement, "auto" id default. also us,ca,uk,si is available
             lazy: Defaults to true.  The function will only request the json data as it is needed.
                 Results in more requests, but probably a faster response time (I haven't checked)
@@ -58,38 +58,38 @@ class Forcastio():
             if 'currently' not in self.json:
                 response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,hourly,daily,alerts,flags'))
                 self.json['currently'] = response['currently']
-            return ForcastioDataPoint(self.json['currently'])
+            return ForecastioDataPoint(self.json['currently'])
         except:
-            return ForcastioDataPoint()        
+            return ForecastioDataPoint()        
 
     def getMinutely(self):
         try:
             if 'minutely' not in self.json:
                 response = json.load(urllib2.urlopen(self.url+'&exclude=currently,hourly,daily,alerts,flags'))
                 self.json['minutely'] = response['minutely']
-            return ForcastioDataBlock(self.json['minutely'])
+            return ForecastioDataBlock(self.json['minutely'])
         except:
-            return ForcastioDataBlock()       
+            return ForecastioDataBlock()       
 
     def getHourly(self):
         try:
             if 'hourly' not in self.json:
                 response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,currently,daily,alerts,flags'))
                 self.json['hourly'] = response['hourly']
-            return ForcastioDataBlock(self.json['hourly'])
+            return ForecastioDataBlock(self.json['hourly'])
         except:
-            return ForcastioDataBlock()
+            return ForecastioDataBlock()
 
     def getDaily(self):
         try:
             if 'daily' not in self.json:
                 response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,currently,hourly,alerts,flags'))
                 self.json['daily'] = response['daily']
-            return ForcastioDataBlock(self.json['daily'])
+            return ForecastioDataBlock(self.json['daily'])
         except:
-            return ForcastioDataBlock()
+            return ForecastioDataBlock()
 
-class ForcastioDataBlock():
+class ForecastioDataBlock():
 
     def __init__(self, d=None):
         try:
@@ -105,16 +105,16 @@ class ForcastioDataBlock():
 
         if d is not None:
             for datapoint in d['data']:
-                self.data.append(ForcastioDataPoint(datapoint))
+                self.data.append(ForecastioDataPoint(datapoint))
 
     def __unicode__(self):
-        return "<ForcastioDataBlock instance: "+self.summary +" with "+str(self.data.__len__())+" DataPoints>"
+        return "<ForecastioDataBlock instance: "+self.summary +" with "+str(self.data.__len__())+" DataPoints>"
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
 
-class ForcastioDataPoint():
+class ForecastioDataPoint():
 
     def __init__(self, d=None):
         
@@ -243,7 +243,7 @@ class ForcastioDataPoint():
 
     
     def __unicode__(self):
-        return "<ForcastioDataPoint instance: "+self.summary +" at "+str(self.time)+">"
+        return "<ForecastioDataPoint instance: "+self.summary +" at "+str(self.time)+">"
 
     def __str__(self):
         return unicode(self).encode('utf-8')
