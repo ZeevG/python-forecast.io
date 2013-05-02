@@ -1,7 +1,9 @@
 try: import simplejson as json
 except ImportError: import json
-
+from multiprocessing import Pool
 import datetime, time as Time, urllib2
+import threading
+import Queue
 
 
 
@@ -16,7 +18,10 @@ class Forecastio():
         self.json = None
 
 
-    def loadForecast(self, inLat, inLong, time=None, units="auto", lazy=False):
+    def loadForecast(self, inLat, inLong, time=None, units="auto", lazy=False, callback=None):
+
+
+
         """
             This function builds the request url and loads some or all of the needed json depending on lazy is True
 
@@ -41,17 +46,33 @@ class Forecastio():
         else:
                 baseURL = self.url
         
+        if callback == None:
+            try:
+                
+                self.json = json.load(urllib2.urlopen(baseURL))
+                return {'success': True, 'url':baseURL, 'response':self.json}
 
+            except urllib2.HTTPError, e:
+                return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
+            except urllib2.URLError, e:
+                return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
+            except Exception, e:
+                return {'success': False, 'url':baseURL, 'response':e}
+
+        else:
+            thr = threading.Thread(target=self.loadAsync, args=(baseURL,), kwargs={'callback':callback})
+            thr.start()
+
+    def loadAsync(self, url, callback=None):
         try:
-            self.json = json.load(urllib2.urlopen(baseURL))
-            return {'success': True, 'url':baseURL, 'response':self.json}
+            self.json = json.load(urllib2.urlopen(url))
+            callback(self, {'success': True, 'url':url, 'response':self.json})
         except urllib2.HTTPError, e:
-            return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
+            callback(self, {'success': False, 'url':url, 'response':str(e.code)+", "+e.reason})
         except urllib2.URLError, e:
-            return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
+            callback(self, {'success': False, 'url':url, 'response':str(e.code)+", "+e.reason})
         except Exception, e:
-            return {'success': False, 'url':baseURL, 'response':e}
-        
+            callback(self, {'success': False, 'url':url, 'response':e})
 
     def getCurrently(self):
         try:
