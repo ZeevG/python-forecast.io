@@ -5,7 +5,7 @@ This is a wrapper for the forecast.io API.  You need an API key to use it (http:
 The Use section covers the basics of how to use it.  I suggest also reading the source if you want to know more about how to use the wrapper or what its doing.
 
 
-## Use
+## Basic Use
 
 Although you don't need to know anything about the forecast.io API to use this module, their docs are available at http://developer.forecast.io
 
@@ -22,8 +22,6 @@ Use the `forecast.getDataBlockType()` eg. `getCurrently()`, `getDaily()`, `getHo
 
 These functions return a DataBlock. Except `getCurrently()` which returns a DataPoint.
 
-If you call loadForecast() with lazy=True, this class will request the data only as it is needed.  This should speed up response times.
-
 ```python
 byHour = forecast.getHourly()
 print byHour.summary
@@ -37,6 +35,60 @@ for hourlyData in byHour.data:
     print hourlyData.temperature
 ```
 
+## loadForecast() Options
+
+The loadForecast() method has a few optional parameters and also returns a dict of useful data. Providing a latitude and longitude are the only required parameters.
+
+
+#### Return Value
+Unless called asynchronously (see below) `loadForecast()` returns a dictionary.
+```python
+result = forecast.loadForecast(latitude,longitude)
+```
+Say `loadForecast()` is called like above, `result` would be a dict with the following keys.
+* result['success'] Will hold True or False depending on the response from the Forecast.io API
+* result['url'] Will hold the url which is actually called by the wrapper
+* result['response'] Will hold the response from the Forecast.io API.  If the request was successful this is JSON formatted data.
+
+
+#### Units
+You can specify the units of measurement using one of the strings "auto","us","ca","uk","si". "auto" is the default and also most likely the preferred option, it will determine the units based on the location provided. The Forecast.io docs detail exactly what the different strings mean.
+```python
+forecast.loadForecast(latitude,longitude, units="si")
+```
+#### Time
+You can provide a time for the forecast either in the past or future by passing in a datetime object
+
+```python
+forecast.loadForecast(latitude,longitude, time=datetime.datetime(2013,2,1))
+```
+
+#### Lazy Execution
+If you call loadForecast() with lazy=True, the data needed will be requested from the Forecast.io API as it is required. This should speed up response times.
+
+```python
+forecast.loadForecast(latitude,longitude, lazy=True)
+```
+At this point only a very minimal request has been made to verify the API server is up and lat, long and API key are correct.
+```python
+forecast.getHourly()
+```
+At this point only the hourly data is requested from the Forcast.io API.
+
+#### Asynchronous Call
+A callback function accepting two parameters can also be provided which is called when the API response has been recieved. If a callback is provided, `loadForecast()` does not return anything directly and the http request is made asynchronously.
+
+```python
+def test(forecastInstance, result):
+    if result['success'] == True:
+        print forecastInstance.getHourly()[0].temperature
+
+forecast.loadForecast(latitude,longitude, callback=test)
+
+```
+
+Where `forecastInstance` is the Forecastio instance which made the loadForcast() call (incase you have many instances).
+`result` is the dictionary which `loadForecast()` would normally return.
 
 ## License (BSD 2-clause)
 
