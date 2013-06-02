@@ -45,7 +45,7 @@ class Forecastio():
             This function builds the request url and loads some or all of the
             needed json depending on lazy is True
 
-            inLat: The latitude of the forecast
+            inLat:  The latitude of the forecast
             inLong: The longitude of the forecast
             time:   A datetime.datetime object representing the desired time of
                     the forecast
