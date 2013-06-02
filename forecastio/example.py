@@ -1,9 +1,11 @@
 from forecastio import Forecastio
 import datetime
 
+
 def main():
     forecast = Forecastio("YOUR API KEY")
-    result = forecast.loadForecast(-31.967819,115.87718, time=datetime.datetime.now(), units="si")
+    result = forecast.loadForecast(-31.967819, 115.87718,
+                                   time=datetime.datetime.now(), units="si")
     print result
 
     if result['success'] is True:
@@ -23,6 +25,6 @@ def main():
     else:
         print "A problem accured communicating with the Forecast.io API"
 
-    
+
 if __name__ == "__main__":
     main()
