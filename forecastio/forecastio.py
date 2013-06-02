@@ -1,5 +1,12 @@
-try: import json
-except ImportError: import simplejson as json
+try:
+    import json
+except ImportError:
+    try:
+        import simplejson as json
+    except ImportError:
+        print('It appears you are running an older version of Python, '
+              'please install simplejson from the cheese shop.')
+        quit()
 from multiprocessing import Pool
 import datetime, time as Time, urllib2
 import threading
