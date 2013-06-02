@@ -45,10 +45,10 @@ class Forecastio():
                 baseURL = self.url + '&exclude=minutely,currently,hourly,daily,alerts,flags'
         else:
                 baseURL = self.url
-        
+
         if callback == None:
             try:
-                
+
                 self.json = json.load(urllib2.urlopen(baseURL))
                 return {'success': True, 'url':baseURL, 'response':self.json}
 
@@ -81,7 +81,7 @@ class Forecastio():
                 self.json['currently'] = response['currently']
             return ForecastioDataPoint(self.json['currently'])
         except:
-            return ForecastioDataPoint()        
+            return ForecastioDataPoint()
 
     def getMinutely(self):
         try:
@@ -90,7 +90,7 @@ class Forecastio():
                 self.json['minutely'] = response['minutely']
             return ForecastioDataBlock(self.json['minutely'])
         except:
-            return ForecastioDataBlock()       
+            return ForecastioDataBlock()
 
     def getHourly(self):
         try:
@@ -138,7 +138,7 @@ class ForecastioDataBlock():
 class ForecastioDataPoint():
 
     def __init__(self, d=None):
-        
+
 
         try:
             self.time = datetime.datetime.fromtimestamp(int(d['time']))
@@ -260,9 +260,9 @@ class ForecastioDataPoint():
         except:
             self.ozone = None
 
-        
 
-    
+
+
     def __unicode__(self):
         return "<ForecastioDataPoint instance: "+self.summary +" at "+str(self.time)+">"
 
