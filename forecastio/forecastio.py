@@ -8,14 +8,15 @@ except ImportError:
               'please install simplejson from the cheese shop.')
         quit()
 from multiprocessing import Pool
-import datetime, time as Time, urllib2
+import datetime
+import time as Time
+import urllib2
 import threading
 import Queue
-
+import warnings
 
 
 class Forecastio():
-
 
     def __init__(self, inKey):
         self.key = inKey
@@ -24,98 +25,190 @@ class Forecastio():
         self.url = None
         self.json = None
 
+    def loadForecast(self, inLat, inLong, time=None, units="auto", lazy=False,
+                     callback=None):
+        """
+        Deprecated for PEP 8 compliance
+        """
+        params = locals()
+        del params['self']
+        warnings.simplefilter('default')
+        warnings.warn('"loadForecast()" deprecated, please use '
+                      '"load_forecast()"',
+                      DeprecationWarning)
+        return self.load_forecast(**params)
 
-    def loadForecast(self, inLat, inLong, time=None, units="auto", lazy=False, callback=None):
-
-
+    def load_forecast(self, inLat, inLong, time=None, units="auto", lazy=False,
+                      callback=None):
 
         """
-            This function builds the request url and loads some or all of the needed json depending on lazy is True
+            This function builds the request url and loads some or all of the
+            needed json depending on lazy is True
 
             inLat: The latitude of the forecast
             inLong: The longitude of the forecast
-            time: A datetime.datetime object representing the desired time of the forecast
-            units: A string of the preferred units of measurement, "auto" id default. also us,ca,uk,si is available
-            lazy: Defaults to true.  The function will only request the json data as it is needed.
-                Results in more requests, but probably a faster response time (I haven't checked)
+            time:   A datetime.datetime object representing the desired time of
+                    the forecast
+            units:  A string of the preferred units of measurement, "auto" id
+                    default. also us,ca,uk,si is available
+            lazy:   Defaults to true.  The function will only request the json
+                    data as it is needed. Results in more requests, but
+                    probably a faster response time (I haven't checked)
         """
+
         self.lat = inLat
         self.long = inLong
         self.time = time
 
         if self.time is None:
-            self.url = 'https://api.forecast.io/forecast/'+str(self.key)+'/'+str(self.lat)+','+str(self.long)+'?units='+units
+            self.url = 'https://api.forecast.io/forecast/%s/%s,%s' \
+                       '?units=%s' % (self.key, self.lat, self.long, units,)
         else:
-            self.url = 'https://api.forecast.io/forecast/'+str(self.key)+'/'+str(self.lat)+','+str(self.long)+','+str(int(Time.mktime(self.time.timetuple())))+'?units='+units
+            url_time = str(int(Time.mktime(self.time.timetuple())))
+            self.url = 'https://api.forecast.io/forecast/%s/%s,%s,%s' \
+                       '?units=%s' % (self.key, self.lat, self.long, url_time,
+                                      units,)
 
-        if lazy == True:
-                baseURL = self.url + '&exclude=minutely,currently,hourly,daily,alerts,flags'
+        if lazy is True:
+            baseURL = "%s&exclude=%s" % (self.url,
+                                         'minutely,currently,hourly,'
+                                         'daily,alerts,flags')
         else:
-                baseURL = self.url
+            baseURL = self.url
 
-        if callback == None:
+        if callback is None:
             try:
-
                 self.json = json.load(urllib2.urlopen(baseURL))
-                return {'success': True, 'url':baseURL, 'response':self.json}
-
+                return {'success': True, 'url': baseURL, 'response': self.json}
             except urllib2.HTTPError, e:
-                return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
+                return {'success': False, 'url': baseURL,
+                        'response': '%s, %s' % (e.code, e.reason,)}
             except urllib2.URLError, e:
-                return {'success': False, 'url':baseURL, 'response':str(e.code)+", "+e.reason}
+                return {'success': False, 'url': baseURL,
+                        'response': '%s, %s' % (e.code, e.reason,)}
             except Exception, e:
-                return {'success': False, 'url':baseURL, 'response':e}
+                return {'success': False, 'url': baseURL, 'response': e}
 
         else:
-            thr = threading.Thread(target=self.loadAsync, args=(baseURL,), kwargs={'callback':callback})
+            thr = threading.Thread(target=self.load_async, args=(baseURL,),
+                                   kwargs={'callback': callback})
             thr.start()
 
     def loadAsync(self, url, callback=None):
+        """
+        Deprecated for PEP 8 compliance
+        """
+        params = locals()
+        del params['self']
+        warnings.simplefilter('default')
+        warnings.warn('"loadAsync()" deprecated, please use "load_async()"',
+                      DeprecationWarning)
+        self.load_async(**params)
+
+    def load_async(self, url, callback=None):
         try:
             self.json = json.load(urllib2.urlopen(url))
-            callback(self, {'success': True, 'url':url, 'response':self.json})
+            callback(self, {'success': True, 'url': url,
+                            'response': self.json})
         except urllib2.HTTPError, e:
-            callback(self, {'success': False, 'url':url, 'response':str(e.code)+", "+e.reason})
+            callback(self, {'success': False, 'url': url,
+                            'response': '%s, %s' % (e.code, e.reason,)})
         except urllib2.URLError, e:
-            callback(self, {'success': False, 'url':url, 'response':str(e.code)+", "+e.reason})
+            callback(self, {'success': False, 'url': url,
+                            'response': '%s, %s' % (e.code, e.reason,)})
         except Exception, e:
-            callback(self, {'success': False, 'url':url, 'response':e})
+            callback(self, {'success': False, 'url': url, 'response': e})
 
     def getCurrently(self):
+        """
+        Deprecated for PEP 8 compliance
+        """
+        params = locals()
+        del params['self']
+        warnings.simplefilter('default')
+        warnings.warn('"getCurrently()" deprecated, please use '
+                      '"get_currently()"',
+                      DeprecationWarning)
+        return self.get_currently(**params)
+
+    def get_currently(self):
         try:
             if 'currently' not in self.json:
-                response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,hourly,daily,alerts,flags'))
+                url = "%s&exclude=%s" % (self.url, 'minutely,hourly,daily,'
+                                                   'alerts,flags',)
+                response = json.load(urllib2.urlopen(url))
                 self.json['currently'] = response['currently']
             return ForecastioDataPoint(self.json['currently'])
         except:
             return ForecastioDataPoint()
 
     def getMinutely(self):
+        """
+        Deprecated for PEP 8 compliance
+        """
+        params = locals()
+        del params['self']
+        warnings.simplefilter('default')
+        warnings.warn('"getMinutely()" deprecated, please use '
+                      '"get_minutely()"',
+                      DeprecationWarning)
+        return self.get_minutely(params)
+
+    def get_minutely(self):
         try:
             if 'minutely' not in self.json:
-                response = json.load(urllib2.urlopen(self.url+'&exclude=currently,hourly,daily,alerts,flags'))
+                url = "%s&exclude=%s" % (self.url, 'currently,hourly,daily,'
+                                                   'alerts,flags',)
+                response = json.load(urllib2.urlopen(url))
                 self.json['minutely'] = response['minutely']
             return ForecastioDataBlock(self.json['minutely'])
         except:
             return ForecastioDataBlock()
 
     def getHourly(self):
+        """
+        Deprecated for PEP 8 compliance
+        """
+        params = locals()
+        del params['self']
+        warnings.simplefilter('default')
+        warnings.warn('"getHourly()" deprecated, please use "get_hourly()"',
+                      DeprecationWarning)
+        return self.get_hourly(params)
+
+    def get_hourly(self):
         try:
             if 'hourly' not in self.json:
-                response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,currently,daily,alerts,flags'))
+                url = "%s&exclude=%s" % (self.url, 'minutely,currently,daily,'
+                                                   'alerts,flags')
+                response = json.load(urllib2.urlopen(url))
                 self.json['hourly'] = response['hourly']
             return ForecastioDataBlock(self.json['hourly'])
         except:
             return ForecastioDataBlock()
 
     def getDaily(self):
+        """
+        Deprecated for PEP 8 compliance
+        """
+        params = locals()
+        del params['self']
+        warnings.simplefilter('default')
+        warnings.warn('"getDaily()" deprecated, please use "get_daily()"',
+                      DeprecationWarning)
+        return self.get_daily(params)
+
+    def get_daily(self):
         try:
             if 'daily' not in self.json:
-                response = json.load(urllib2.urlopen(self.url+'&exclude=minutely,currently,hourly,alerts,flags'))
+                url = "%s&exclude=%s" % (self.url, 'minutely,currently,hourly,'
+                                                   'alerts,flags')
+                response = json.load(urllib2.urlopen(url))
                 self.json['daily'] = response['daily']
             return ForecastioDataBlock(self.json['daily'])
         except:
             return ForecastioDataBlock()
+
 
 class ForecastioDataBlock():
 
@@ -136,7 +229,8 @@ class ForecastioDataBlock():
                 self.data.append(ForecastioDataPoint(datapoint))
 
     def __unicode__(self):
-        return "<ForecastioDataBlock instance: "+self.summary +" with "+str(self.data.__len__())+" DataPoints>"
+        return '<ForecastioDataBlock instance: ' \
+               '%s with %d DataPoints>' % (self.summary, len(self.data),)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
@@ -145,7 +239,6 @@ class ForecastioDataBlock():
 class ForecastioDataPoint():
 
     def __init__(self, d=None):
-
 
         try:
             self.time = datetime.datetime.fromtimestamp(int(d['time']))
@@ -163,12 +256,14 @@ class ForecastioDataPoint():
             self.summary = None
 
         try:
-            self.sunriseTime = datetime.datetime.fromtimestamp(int(d['sunriseTime']))
+            sr_time = int(d['sunriseTime'])
+            self.sunriseTime = datetime.datetime.fromtimestamp(sr_time)
         except:
             self.sunriseTime = None
 
         try:
-            self.sunsetTime = datetime.datetime.fromtimestamp(int(d['sunsetTime']))
+            ss_time = int(d['sunsetTime'])
+            self.sunsetTime = datetime.datetime.fromtimestamp(ss_time)
         except:
             self.sunsetTime = None
 
@@ -267,12 +362,9 @@ class ForecastioDataPoint():
         except:
             self.ozone = None
 
-
-
-
     def __unicode__(self):
-        return "<ForecastioDataPoint instance: "+self.summary +" at "+str(self.time)+">"
+        return '<ForecastioDataPoint instance: ' \
+               '%s at %s>' % (self.summary, self.time,)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
-
