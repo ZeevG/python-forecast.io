@@ -1,5 +1,5 @@
-try: import simplejson as json
-except ImportError: import json
+try: import json
+except ImportError: import simplejson as json
 from multiprocessing import Pool
 import datetime, time as Time, urllib2
 import threading
