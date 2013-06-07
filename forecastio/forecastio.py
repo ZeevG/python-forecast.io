@@ -152,7 +152,7 @@ class Forecastio():
         warnings.warn('"getMinutely()" deprecated, please use '
                       '"get_minutely()"',
                       DeprecationWarning)
-        return self.get_minutely(params)
+        return self.get_minutely(**params)
 
     def get_minutely(self):
         try:
@@ -174,7 +174,7 @@ class Forecastio():
         warnings.simplefilter('default')
         warnings.warn('"getHourly()" deprecated, please use "get_hourly()"',
                       DeprecationWarning)
-        return self.get_hourly(params)
+        return self.get_hourly(**params)
 
     def get_hourly(self):
         try:
@@ -196,7 +196,7 @@ class Forecastio():
         warnings.simplefilter('default')
         warnings.warn('"getDaily()" deprecated, please use "get_daily()"',
                       DeprecationWarning)
-        return self.get_daily(params)
+        return self.get_daily(**params)
 
     def get_daily(self):
         try:
