@@ -283,9 +283,9 @@ class ForecastioDataPoint():
             self.precipIntensityMaxTime = None
 
         try:
-            self.precipProbablility = d['precipProbablility']
+            self.precipProbability = d['precipProbability']
         except:
-            self.precipProbablility = None
+            self.precipProbability = None
 
         try:
             self.precipType = d['precipType']
