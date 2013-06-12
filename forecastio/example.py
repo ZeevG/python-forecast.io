@@ -23,7 +23,7 @@ def main():
         for daily_data_point in by_day.data:
             print daily_data_point
     else:
-        print "A problem accured communicating with the Forecast.io API"
+        print "A problem occurred communicating with the Forecast.io API"
 
 
 if __name__ == "__main__":
