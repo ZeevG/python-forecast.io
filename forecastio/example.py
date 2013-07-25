@@ -3,9 +3,9 @@ import datetime
 
 
 def main():
-    forecast = Forecastio("YOUR API KEY")
+    forecast = Forecastio("2f0a7c8768683c07cb684c422abf7047")
     result = forecast.load_forecast(-31.967819, 115.87718,
-                                   time=datetime.datetime.now(), units="si")
+                                   time=datetime.datetime.now(), units="si", lazy=True)
     print result
 
     if result['success'] is True:
