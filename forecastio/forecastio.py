@@ -1,6 +1,5 @@
-import json
 import datetime
-import urllib2
+import requests
 
 
 class Forecast():
@@ -12,9 +11,10 @@ class Forecast():
     def currently(self):
         try:
             if 'currently' not in self.json:
-                url = "%s&exclude=%s" % (self.url, 'minutely,hourly,daily,'
-                                                   'alerts,flags',)
-                response = json.load(urllib2.urlopen(url))
+                url = "%s&exclude=%s" % (self.url.split('&')[0],
+                      'minutely,hourly,daily,alerts,flags')
+
+                response = requests.get(url).json()
                 self.json['currently'] = response['currently']
             return ForecastioDataPoint(self.json['currently'])
         except:
@@ -23,9 +23,10 @@ class Forecast():
     def minutely(self):
         try:
             if 'minutely' not in self.json:
-                url = "%s&exclude=%s" % (self.url, 'currently,hourly,daily,'
-                                                   'alerts,flags',)
-                response = json.load(urllib2.urlopen(url))
+                url = "%s&exclude=%s" % (self.url.split('&')[0],
+                      'currently,hourly,daily,alerts,flags')
+
+                response = requests.get(url).json()
                 self.json['minutely'] = response['minutely']
             return ForecastioDataBlock(self.json['minutely'])
         except:
@@ -34,9 +35,10 @@ class Forecast():
     def hourly(self):
         try:
             if 'hourly' not in self.json:
-                url = "%s&exclude=%s" % (self.url, 'minutely,currently,daily,'
-                                                   'alerts,flags')
-                response = json.load(urllib2.urlopen(url))
+                url = "%s&exclude=%s" % (self.url.split('&')[0],
+                      'minutely,currently,daily,alerts,flags')
+
+                response = requests.get(url).json()
                 self.json['hourly'] = response['hourly']
             return ForecastioDataBlock(self.json['hourly'])
         except:
@@ -45,9 +47,10 @@ class Forecast():
     def daily(self):
         try:
             if 'daily' not in self.json:
-                url = "%s&exclude=%s" % (self.url, 'minutely,currently,hourly,'
-                                                   'alerts,flags')
-                response = json.load(urllib2.urlopen(url))
+                url = "%s&exclude=%s" % (self.url.split('&')[0],
+                      'minutely,currently,hourly,alerts,flags')
+
+                response = requests.get(url).json()
                 self.json['daily'] = response['daily']
             return ForecastioDataBlock(self.json['daily'])
         except:

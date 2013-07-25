@@ -1,7 +1,5 @@
-import json
 import requests
 import time as Time
-import urllib2
 import threading
 
 from forecastio import Forecast
@@ -46,29 +44,20 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
         baseURL = url
 
     if callback is None:
-        return make_request(baseURL)
+        return make_forecast(make_request(baseURL))
     else:
         thr = threading.Thread(target=load_async, args=(baseURL,),
                                kwargs={'callback': callback})
         thr.start()
 
 
+def make_forecast(response):
+    return Forecast(response.json(), response, response.headers)
+
+
 def make_request(url):
-    r = requests.get(url)
-    print r.headers
-    return Forecast(r.json(), url, r.headers)
+    return requests.get(url)
 
 
-def load_async(self, url, callback=None):
-    try:
-        self.json = json.load(urllib2.urlopen(url))
-        callback(self, {'success': True, 'url': url,
-                        'response': self.json})
-    except urllib2.HTTPError, e:
-        callback(self, {'success': False, 'url': url,
-                        'response': '%s, %s' % (e.code, e.reason,)})
-    except urllib2.URLError, e:
-        callback(self, {'success': False, 'url': url,
-                        'response': '%s, %s' % (e.code, e.reason,)})
-    except Exception, e:
-        callback(self, {'success': False, 'url': url, 'response': e})
+def load_async(self, url, callback):
+    callback(make_forecast(make_request(url)))

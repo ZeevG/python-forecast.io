@@ -1,2 +1,2 @@
-from .api import load_forecast
-from .forecastio import Forecast
+from api import load_forecast, make_request
+from forecastio import Forecast

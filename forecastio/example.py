@@ -28,3 +28,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+import forecastio
+
+api_key = "2f0a7c8768683c07cb684c422abf7047"
+lat = -31.967819
+lng = 115.87718
+
+forecastio.load_forecast(api_key, lat, lng)
