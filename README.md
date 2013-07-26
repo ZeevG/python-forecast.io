@@ -5,6 +5,15 @@ This is a wrapper for the forecast.io API.  You need an API key to use it (http:
 The Use section covers the basics of how to use it.  I suggest also reading the source if you want to know more about how to use the wrapper or what its doing.
 
 
+## Recent Changes
+
+* python-requests is now used for requests. This adds the following benifits:
+	* Gzip compression
+	* HTTPS is used
+
+* Updates to the way load_forecast is used. This should make it easier to keep track of the state of your Forecast objects.
+
+
 ## Basic Use
 
 Although you don't need to know anything about the forecast.io API to use this module, their docs are available at http://developer.forecast.io

@@ -5,8 +5,13 @@ import requests
 class Forecast():
     def __init__(self, data, url, headers):
         self.url = url
-        self.HTTP_headers = headers
+        self.http_headers = headers
         self.json = data
+
+    def update(self):
+        r = requests.get(self.url)
+        self.data = r.json()
+        self.http_headers = r.headers
 
     def currently(self):
         try:
