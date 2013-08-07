@@ -25,7 +25,7 @@ To use the wrapper import Forecastio as in the example script. Then call the fun
 ```python
 import forecastio
 
-api_key = "2f0a7c8768683c07cb684c422abf7047"
+api_key = "YOUR API KEY"
 lat = -31.967819
 lng = 115.87718
 
@@ -90,6 +90,9 @@ forecastio.load_forecast(api_key, lat, lng, callback=test)
 ```
 
 Where `forecast` is the Forecast instance which is normally returned from `load_forecast()`
+
+#### Update Forecast Data
+Forecast objects have an `update()` method which you can use to refresh the forecast data.
 
 ## License (BSD 2-clause)
 
