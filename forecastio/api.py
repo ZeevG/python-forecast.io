@@ -59,5 +59,5 @@ def make_request(url):
     return requests.get(url)
 
 
-def load_async(self, url, callback):
+def load_async(url, callback):
     callback(make_forecast(make_request(url)))
