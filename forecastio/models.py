@@ -97,7 +97,12 @@ class ForecastioDataPoint():
             self.time = datetime.datetime.fromtimestamp(int(d['time']))
         except:
             self.time = None
-
+        
+        try:
+            self.utime = d['time']
+        except:
+            self.utime = None
+        
         try:
             self.icon = d['icon']
         except:
