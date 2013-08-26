@@ -65,20 +65,12 @@ class Forecast():
 class ForecastioDataBlock():
 
     def __init__(self, d=None):
-        try:
-            self.summary = d['summary']
-        except:
-            self.summary = None
-        try:
-            self.icon = d['icon']
-        except:
-            self.icon = None
+        d = d or {}
+        self.summary = d.get('summary')
+        self.icon = d.get('icon')
 
-        self.data = []
-
-        if d is not None:
-            for datapoint in d['data']:
-                self.data.append(ForecastioDataPoint(datapoint))
+        self.data = [ForecastioDataPoint(datapoint) 
+                     for datapoint in d.get('data', [])]
 
     def __unicode__(self):
         return '<ForecastioDataBlock instance: ' \
@@ -92,26 +84,16 @@ class ForecastioDataBlock():
 class ForecastioDataPoint():
 
     def __init__(self, d=None):
+        d = d or {}
 
         try:
             self.time = datetime.datetime.fromtimestamp(int(d['time']))
         except:
             self.time = None
-        
-        try:
-            self.utime = d['time']
-        except:
-            self.utime = None
-        
-        try:
-            self.icon = d['icon']
-        except:
-            self.icon = None
 
-        try:
-            self.summary = d['summary']
-        except:
-            self.summary = None
+        self.utime = d.get('time')
+        self.icon = d.get('icon')
+        self.summary = d.get('summary')
 
         try:
             sr_time = int(d['sunriseTime'])
@@ -125,100 +107,25 @@ class ForecastioDataPoint():
         except:
             self.sunsetTime = None
 
-        try:
-            self.precipIntensity = d['precipIntensity']
-        except:
-            self.precipIntensity = None
-
-        try:
-            self.precipIntensityMax = d['precipIntensityMax']
-        except:
-            self.precipIntensityMax = None
-
-        try:
-            self.precipIntensityMaxTime = d['precipIntensityMaxTime']
-        except:
-            self.precipIntensityMaxTime = None
-
-        try:
-            self.precipProbability = d['precipProbability']
-        except:
-            self.precipProbability = None
-
-        try:
-            self.precipType = d['precipType']
-        except:
-            self.precipType = None
-
-        try:
-            self.precipAccumulation = d['precipAccumulation']
-        except:
-            self.precipAccumulation = None
-
-        try:
-            self.temperature = d['temperature']
-        except:
-            self.temperature = None
-
-        try:
-            self.temperatureMin = d['temperatureMin']
-        except:
-            self.temperatureMin = None
-
-        try:
-            self.temperatureMinTime = d['temperatureMinTime']
-        except:
-            self.temperatureMinTime = None
-
-        try:
-            self.temperatureMax = d['temperatureMax']
-        except:
-            self.temperatureMax = None
-
-        try:
-            self.temperatureMaxTime = d['temperatureMaxTime']
-        except:
-            self.temperatureMaxTime = None
-
-        try:
-            self.dewPoint = d['dewPoint']
-        except:
-            self.dewPoint = None
-
-        try:
-            self.windspeed = d['windSpeed']
-        except:
-            self.windspeed = None
-
-        try:
-            self.windbaring = d['windBearing']
-        except:
-            self.windbaring = None
-
-        try:
-            self.cloudcover = d['cloudCover']
-        except:
-            self.cloudcover = None
-
-        try:
-            self.humidity = d['humidity']
-        except:
-            self.humidity = None
-
-        try:
-            self.pressure = d['pressure']
-        except:
-            self.pressure = None
-
-        try:
-            self.visbility = d['visbility']
-        except:
-            self.visbility = None
-
-        try:
-            self.ozone = d['ozone']
-        except:
-            self.ozone = None
+        self.precipIntensity = d.get('precipIntensity')
+        self.precipIntensityMax = d.get('precipIntensityMax')
+        self.precipIntensityMaxTime = d.get('precipIntensityMaxTime')
+        self.precipProbability = d.get('precipProbability')
+        self.precipType = d.get('precipType')
+        self.precipAccumulation = d.get('precipAccumulation')
+        self.temperature = d.get('temperature')
+        self.temperatureMin = d.get('temperatureMin')
+        self.temperatureMinTime = d.get('temperatureMinTime')
+        self.temperatureMax = d.get('temperatureMax')
+        self.temperatureMaxTime = d.get('temperatureMaxTime')
+        self.dewPoint = d.get('dewPoint')
+        self.windspeed = d.get('windSpeed')
+        self.windbaring = d.get('windBearing')
+        self.cloudcover = d.get('cloudCover')
+        self.humidity = d.get('humidity')
+        self.pressure = d.get('pressure')
+        self.visbility = d.get('visbility')
+        self.ozone = d.get('ozone')
 
     def __unicode__(self):
         return '<ForecastioDataPoint instance: ' \
