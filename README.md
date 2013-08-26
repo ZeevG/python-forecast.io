@@ -1,6 +1,6 @@
 ## Forecast.io Wrapper
 
-This is a wrapper for the forecast.io API.  You need an API key to use it (http://developer.forecast.io).  It also requires the urllib2 library and simplejson or json libraries, most people should have these.
+This is a wrapper for the forecast.io API.  You need an API key to use it (http://developer.forecast.io).  It also requires the requests library (http://docs.python-requests.org) which you can install using `pip install requests`
 
 The Use section covers the basics of how to use it.  I suggest also reading the source if you want to know more about how to use the wrapper or what its doing.
 
