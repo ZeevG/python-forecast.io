@@ -14,56 +14,33 @@ class Forecast():
         self.http_headers = r.headers
 
     def currently(self):
-        try:
-            if 'currently' not in self.json:
-                url = "%s&exclude=%s" % (self.url.split('&')[0],
-                      'minutely,hourly,daily,alerts,flags')
-
-                response = requests.get(url).json()
-                self.json['currently'] = response['currently']
-            return ForecastioDataPoint(self.json['currently'])
-        except:
-            return ForecastioDataPoint()
+        return _forcastio_data('currently')
 
     def minutely(self):
-        try:
-            if 'minutely' not in self.json:
-                url = "%s&exclude=%s" % (self.url.split('&')[0],
-                      'currently,hourly,daily,alerts,flags')
-
-                response = requests.get(url).json()
-                self.json['minutely'] = response['minutely']
-            return ForecastioDataBlock(self.json['minutely'])
-        except:
-            return ForecastioDataBlock()
+        return _forcastio_data('minutely')
 
     def hourly(self):
-        try:
-            if 'hourly' not in self.json:
-                url = "%s&exclude=%s" % (self.url.split('&')[0],
-                      'minutely,currently,daily,alerts,flags')
-
-                response = requests.get(url).json()
-                self.json['hourly'] = response['hourly']
-            return ForecastioDataBlock(self.json['hourly'])
-        except:
-            return ForecastioDataBlock()
+        return _forcastio_data('hourly')
 
     def daily(self):
+        return _forcastio_data('daily')
+
+    def _forcastio_data(self, key):
+        keys = ['minutely', 'currently', 'hourly', 'daily']
         try:
-            if 'daily' not in self.json:
-                url = "%s&exclude=%s" % (self.url.split('&')[0],
-                      'minutely,currently,hourly,alerts,flags')
+            if key not in self.json:
+                keys.remove(key)
+                url = "%s&exclude=%s%s" % (self.url.split('&')[0],
+                      ','.join(keys), ',alerts,flags')
 
                 response = requests.get(url).json()
-                self.json['daily'] = response['daily']
-            return ForecastioDataBlock(self.json['daily'])
+                self.json[key] = response[key]
+            return ForecastioDataBlock(self.json[key])
         except:
             return ForecastioDataBlock()
 
 
 class ForecastioDataBlock():
-
     def __init__(self, d=None):
         d = d or {}
         self.summary = d.get('summary')
@@ -82,7 +59,6 @@ class ForecastioDataBlock():
 
 
 class ForecastioDataPoint():
-
     def __init__(self, d=None):
         d = d or {}
 
