@@ -18,7 +18,7 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
                 the forecast
         units:  A string of the preferred units of measurement, "auto" id
                 default. also us,ca,uk,si is available
-        lazy:   Defaults to true.  The function will only request the json
+        lazy:   Defaults to false.  The function will only request the json
                 data as it is needed. Results in more requests, but
                 probably a faster response time (I haven't checked)
     """

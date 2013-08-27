@@ -3,34 +3,34 @@ import requests
 
 
 class Forecast():
-    def __init__(self, data, url, headers):
-        self.url = url
+    def __init__(self, data, response, headers):
+        self.response = response
         self.http_headers = headers
         self.json = data
 
     def update(self):
-        r = requests.get(self.url)
-        self.data = r.json()
-        self.http_headers = r.headers
+        r = requests.get(self.response.url)
+        self.json = r.json()
+        self.response = r
 
     def currently(self):
-        return _forcastio_data('currently')
+        return self._forcastio_data('currently')
 
     def minutely(self):
-        return _forcastio_data('minutely')
+        return self._forcastio_data('minutely')
 
     def hourly(self):
-        return _forcastio_data('hourly')
+        return self._forcastio_data('hourly')
 
     def daily(self):
-        return _forcastio_data('daily')
+        return self._forcastio_data('daily')
 
     def _forcastio_data(self, key):
         keys = ['minutely', 'currently', 'hourly', 'daily']
         try:
             if key not in self.json:
                 keys.remove(key)
-                url = "%s&exclude=%s%s" % (self.url.split('&')[0],
+                url = "%s&exclude=%s%s" % (self.response.url.split('&')[0],
                       ','.join(keys), ',alerts,flags')
 
                 response = requests.get(url).json()
