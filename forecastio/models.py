@@ -35,10 +35,16 @@ class Forecast():
 
                 response = requests.get(url).json()
                 self.json[key] = response[key]
-            return ForecastioDataBlock(self.json[key])
-        except:
-            return ForecastioDataBlock()
 
+            if key == 'currently':
+                return ForecastioDataPoint(self.json[key])
+            else:
+                return ForecastioDataBlock(self.json[key])
+        except:
+            if key == 'currently':
+                return ForecastioDataPoint()
+            else:
+                return ForecastioDataBlock()
 
 class ForecastioDataBlock():
     def __init__(self, d=None):
