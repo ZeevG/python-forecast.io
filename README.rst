@@ -88,24 +88,25 @@ Parameters:
 The **Forecast** object, it contains both weather data and the HTTP response from forecast.io
 
 **Attributes**
-	+ **response**
-		+ The Response object returned from requests request.get() method. See https://requests.readthedocs.org/en/latest/api/#requests.Response
-	+ **http_headers**
-		+ A dictionary of response headers. 'X-Forecast-API-Calls' might be of interest, it contains the number of API calls made by the given API key for today.
-	+ **json**
-		+ A dictionary containing the json data returned from the API call.
+	- **response**
+		- The Response object returned from requests request.get() method. See https://requests.readthedocs.org/en/latest/api/#requests.Response
+	- **http_headers**
+		- A dictionary of response headers. 'X-Forecast-API-Calls' might be of interest, it contains the number of API calls made by the given API key for today.
+	- **json**
+		- A dictionary containing the json data returned from the API call.
 
 **Methods**
-	+ **currently()**
-		+ Returns a ForecastioDataPoint object
-	+ **minutely()**
-		+ Returns a ForecastioDataBlock object
-	+ **hourly()**
-		+ Returns a ForecastioDataBlock object
-	+ **daily()**
-		+ Returns a ForecastioDataBlock object
-	+ **update()**
-		+ Refreshes the forecast data by making a new request.
+	- **currently()**
+		- Returns a ForecastioDataPoint object
+	- **minutely()**
+		- Returns a ForecastioDataBlock object
+	- **hourly()**
+		- Returns a ForecastioDataBlock object
+	- **daily()**
+		- Returns a ForecastioDataBlock object
+	- **update()**
+		- Refreshes the forecast data by making a new request.
+
 ----------------------------------------------------
 
 
@@ -115,12 +116,13 @@ The **Forecast** object, it contains both weather data and the HTTP response fro
 Contains data about a forecast over time.
 
 **Attributes** *(descriptions taken from the forecast.io website)*
-	+ **summary**
-		+ A human-readable text summary of this data block.
-	+ **icon**
-		+ A machine-readable text summary of this data block.
-	+ **data**
-		+ An array of **ForecastioDataPoint** objects (see below), ordered by time, which together describe the weather conditions at the requested location over time.
+	- **summary**
+		- A human-readable text summary of this data block.
+	- **icon**
+		- A machine-readable text summary of this data block.
+	- **data**
+		- An array of **ForecastioDataPoint** objects (see below), ordered by time, which together describe the weather conditions at the requested location over time.
+
 ----------------------------------------------------
 
 
@@ -131,18 +133,16 @@ Contains data about a forecast at a particular time.
 
 Data points have many attributes, but **not all of them are always available**. Some commonly used ones are:
 
-**Attributes**  *(descriptions taken from the forecast.io website)*
-	+ **summary**
-		+ A human-readable text summary of this data block.
-	+ **icon**
-		+ A machine-readable text summary of this data block.
-	+ **time**
-		+ The time at which this data point occurs.
-	+ **temperature**
-		+ (not defined on daily data points): A numerical value representing the temperature at the given time.
-	+ **precipProbability**
-		+ A numerical value between 0 and 1 (inclusive) representing the probability of precipitation occurring at the given time.
+**Attributes** *(descriptions taken from the forecast.io website)*
+	-	**summary**
+		- A human-readable text summary of this data block.
+	-	**icon**
+		- A machine-readable text summary of this data block.
+	-	**time**
+		- The time at which this data point occurs.
+	-	**temperature**
+		- (not defined on daily data points): A numerical value representing the temperature at the given time.
+	-	**precipProbability**
+		- A numerical value between 0 and 1 (inclusive) representing the probability of precipitation occurring at the given time.
 
 For a full list of ForecastioDataPoint attributes and attribute descriptions, take a look at the forecast.io data point documentation (https://developer.forecast.io/docs/v2#data-points)
-
-----------------------------------------------------
