@@ -11,16 +11,25 @@ The Basic Use section covers enough to get you going. I suggest also reading the
 Recent Changes
 ##############
 
+- python-forecastio is now available on PyPI.
+
 - `Requests <http://docs.python-requests.org/en/latest/>`_ is now used for HTTP/S requests. The main advantages are HTTPS support and GZip compression
 
 - Updates to the way load_forecast is used. This should make it easier to keep track of the state of your Forecast objects.
+
+
+Installation
+############
+
+You can now use pip to install python-forecastio. To install ``pip install python-forecastio`` to remove ``pip uninstall python-forecastio``
+
+If you choose to install python-forecastio manually, it depends on the requests library (http://docs.python-requests.org)
 
 
 Requirements
 ############
 
 - You need an API key to use it (http://developer.forecast.io). Don't worry a key is free.
-- Also, the requests library (http://docs.python-requests.org) which you can install using `pip install requests`
 
 
 Basic Use

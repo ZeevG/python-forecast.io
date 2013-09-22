@@ -1,5 +1,8 @@
 import os
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -14,7 +17,7 @@ setup(
     keywords = "weather API wrapper forecast.io location",
     url = "https://github.com/ZeevG/python-forcast.io",
     packages=['forecastio'],
-    package_data={'forecastio': ['LICENSE.txt', 'README.md']},
-    long_description=read('README.md'),
+    package_data={'forecastio': ['LICENSE.txt', 'README.rst']},
+    long_description=open('README.rst').read(),
     install_requires=['requests'],
 )
