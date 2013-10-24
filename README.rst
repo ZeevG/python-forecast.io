@@ -63,7 +63,7 @@ These methods return a DataBlock. Except ``currently()`` which returns a DataPoi
 	print byHour.icon
 
 
-The .data attributes for each DataBlock is a list of DataPoint objects. This is were all the good data is :)
+The .data attributes for each DataBlock is a list of DataPoint objects. This is where all the good data is :)
 
 .. code-block:: python
 
