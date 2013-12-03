@@ -19,5 +19,5 @@ setup(
     packages=['forecastio'],
     package_data={'forecastio': ['LICENSE.txt', 'README.rst']},
     long_description=open('README.rst').read(),
-    install_requires=['requests'],
+    install_requires=['requests>=1.6'],
 )
