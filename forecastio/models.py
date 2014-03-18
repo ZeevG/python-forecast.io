@@ -24,6 +24,9 @@ class Forecast():
 
     def daily(self):
         return self._forcastio_data('daily')
+        
+    def offset(self):
+        return self.json['offset']
 
     def _forcastio_data(self, key):
         keys = ['minutely', 'currently', 'hourly', 'daily']
