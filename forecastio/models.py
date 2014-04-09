@@ -105,11 +105,11 @@ class ForecastioDataPoint():
         self.temperatureMaxTime = d.get('temperatureMaxTime')
         self.dewPoint = d.get('dewPoint')
         self.windspeed = d.get('windSpeed')
-        self.windbaring = d.get('windBearing')
+        self.windbearing = d.get('windBearing')
         self.cloudcover = d.get('cloudCover')
         self.humidity = d.get('humidity')
         self.pressure = d.get('pressure')
-        self.visbility = d.get('visbility')
+        self.visibility = d.get('visibility')
         self.ozone = d.get('ozone')
 
     def __unicode__(self):
