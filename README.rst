@@ -4,6 +4,12 @@ Forecast.io Wrapper
 
 This is a wrapper for the forecast.io API. It allows you to get the weather for any location, now, in the past, or future.
 
+Projects Using This Library
+###########################
+ - `Biodata.io <http://biodata.io>`
+ 
+If you use this wrapper for something cool, send me and email and I will include your project
+
 I was originally looking for a good python weather API to use in another project. When I struggled to find anything I liked, I decided to write this one.
 
 The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it's very simple).
