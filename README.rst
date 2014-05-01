@@ -6,7 +6,7 @@ This is a wrapper for the forecast.io API. It allows you to get the weather for 
 
 Projects Using This Library
 ###########################
- - `Biodata.io <http://biodata.io>`
+ - `Biodata.io <http://biodata.io>`_
  
 If you use this wrapper for something cool, send me and email and I will include your project
 
