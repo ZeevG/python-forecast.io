@@ -2,7 +2,7 @@ import requests
 import time as Time
 import threading
 
-from models import Forecast
+from forecastio.models import Forecast
 
 
 def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,

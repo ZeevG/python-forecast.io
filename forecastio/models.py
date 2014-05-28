@@ -1,3 +1,4 @@
+import sys
 import datetime
 import requests
 
@@ -64,7 +65,10 @@ class ForecastioDataBlock():
                                                      len(self.data),)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        if sys.version_info[0] >= 3:  # Python 3
+            return unicode(self).encode('utf-8')
+        else:  # Python 2
+            return unicode(self)
 
 
 class ForecastioDataPoint():
@@ -117,4 +121,7 @@ class ForecastioDataPoint():
                '%s at %s>' % (self.summary, self.time,)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        if sys.version_info[0] >= 3:  # Python 3 
+            return self.__unicode__()
+        else:
+            return unicode(self).encode('utf8')

@@ -1,1 +1,1 @@
-from api import load_forecast
+from forecastio.api import load_forecast
