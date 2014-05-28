@@ -1,9 +1,10 @@
-import sys
+from forecastio.utils import UnicodeMixin
 import datetime
 import requests
 
 
-class Forecast():
+class Forecast(UnicodeMixin):
+
     def __init__(self, data, response, headers):
         self.response = response
         self.http_headers = headers
@@ -25,7 +26,7 @@ class Forecast():
 
     def daily(self):
         return self._forcastio_data('daily')
-        
+
     def offset(self):
         return self.json['offset']
 
@@ -50,13 +51,15 @@ class Forecast():
             else:
                 return ForecastioDataBlock()
 
-class ForecastioDataBlock():
+
+class ForecastioDataBlock(UnicodeMixin):
+
     def __init__(self, d=None):
         d = d or {}
         self.summary = d.get('summary')
         self.icon = d.get('icon')
 
-        self.data = [ForecastioDataPoint(datapoint) 
+        self.data = [ForecastioDataPoint(datapoint)
                      for datapoint in d.get('data', [])]
 
     def __unicode__(self):
@@ -64,14 +67,9 @@ class ForecastioDataBlock():
                '%s with %d ForecastioDataPoints>' % (self.summary,
                                                      len(self.data),)
 
-    def __str__(self):
-        if sys.version_info[0] >= 3:  # Python 3
-            return unicode(self).encode('utf-8')
-        else:  # Python 2
-            return unicode(self)
 
+class ForecastioDataPoint(UnicodeMixin):
 
-class ForecastioDataPoint():
     def __init__(self, d=None):
         d = d or {}
 
@@ -119,9 +117,3 @@ class ForecastioDataPoint():
     def __unicode__(self):
         return '<ForecastioDataPoint instance: ' \
                '%s at %s>' % (self.summary, self.time,)
-
-    def __str__(self):
-        if sys.version_info[0] >= 3:  # Python 3 
-            return self.__unicode__()
-        else:
-            return unicode(self).encode('utf8')
