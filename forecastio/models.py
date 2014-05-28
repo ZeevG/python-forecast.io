@@ -7,6 +7,9 @@ class Forecast():
         self.response = response
         self.http_headers = headers
         self.json = data
+        self.alerts = []
+        for alertJSON in self.json['alerts']:
+            self.alerts.append(Alert(alertJSON))
 
     def update(self):
         r = requests.get(self.response.url)
@@ -28,6 +31,9 @@ class Forecast():
     def offset(self):
         return self.json['offset']
 
+    def alerts(self):
+        return self.alerts
+
     def _forcastio_data(self, key):
         keys = ['minutely', 'currently', 'hourly', 'daily']
         try:
@@ -48,6 +54,7 @@ class Forecast():
                 return ForecastioDataPoint()
             else:
                 return ForecastioDataBlock()
+
 
 class ForecastioDataBlock():
     def __init__(self, d=None):
@@ -115,6 +122,23 @@ class ForecastioDataPoint():
     def __unicode__(self):
         return '<ForecastioDataPoint instance: ' \
                '%s at %s>' % (self.summary, self.time,)
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+
+class Alert():
+    def __init__(self, json):
+        self.json = json
+
+    def __getattr__(self, name):
+        try:
+            return self.json[name]
+        except:
+            raise AttributeError
+
+    def __unicode__(self):
+        return '<Alert instance: {0} at {1}>'.format(self.title, self.time)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
