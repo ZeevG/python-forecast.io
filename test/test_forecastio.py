@@ -3,6 +3,7 @@ import unittest
 import forecastio
 from mock import MagicMock
 
+
 class forecastio_test(unittest.TestCase):
     def setUp(self):
         mock_json = open('test/test.json').read()
@@ -14,6 +15,50 @@ class forecastio_test(unittest.TestCase):
         lng = 10.0
         self.fc = forecastio.load_forecast(api_key, lat, lng)
 
-    def test_001(self):
+    def test_current_temp(self):
         fc_cur = self.fc.currently()
         self.assertEqual(fc_cur.temperature, 55.81)
+
+    def test_datablock_summary(self):
+
+        hourl_data = self.fc.hourly()
+        self.assertEqual(hourl_data.summary, "Drizzle until this evening.")
+
+    def test_datablock_icon(self):
+
+        hourl_data = self.fc.hourly()
+        self.assertEqual(hourl_data.icon, "rain")
+
+    def test_datablock_not_available(self):
+
+        minutely = self.fc.minutely()
+        self.assertEqual(minutely.data, [])
+
+    def test_datapoint_number(self):
+
+        hourl_data = self.fc.hourly()
+        self.assertEqual(len(hourl_data.data), 49)
+
+    def test_datapoint_temp(self):
+
+        daily = self.fc.daily()
+        self.assertEqual(daily.data[0].temperatureMin, 50.73)
+
+    def test_datapoint_string_repr(self):
+
+        currently = self.fc.currently()
+
+        self.assertEqual(
+            "{}".format(currently),
+            "<ForecastioDataPoint instance: Overcast at 2014-05-28 16:27:39>"
+        )
+
+    def test_datablock_string_repr(self):
+
+        hourly = self.fc.hourly()
+
+        self.assertEqual(
+            "{}".format(hourly),
+            "<ForecastioDataBlock instance: Drizzle until this evening. "
+            "with 49 ForecastioDataPoints>"
+        )
