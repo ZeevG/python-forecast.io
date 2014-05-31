@@ -9,7 +9,7 @@ This is a wrapper for the forecast.io API. It allows you to get the weather for 
 Projects Using This Library
 ###########################
  - `Biodata.io <http://biodata.io>`_
- asdf
+
 If you use this wrapper for something cool, send me and email and I will include your project
 
 I was originally looking for a good python weather API to use in another project. When I struggled to find anything I liked, I decided to write this one.
