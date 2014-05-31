@@ -1,0 +1,4 @@
+nose
+coverage
+coveralls
+mock
