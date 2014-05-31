@@ -69,3 +69,9 @@ class forecastio_test(unittest.TestCase):
     def test_datapoint_attribute_not_available(self):
         daily = self.fc.daily()
         daily.data[0].notavailable
+
+    def test_apparentTemperature(self):
+        hourly = self.fc.hourly()
+        apprentTemp = hourly.data[0].apparentTemperature
+
+        self.assertEqual(apprentTemp, 55.06)
