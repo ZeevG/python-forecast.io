@@ -1,4 +1,4 @@
-from forecastio.utils import UnicodeMixin
+from forecastio.utils import UnicodeMixin, PropertyUnavailable
 import datetime
 import requests
 
@@ -70,17 +70,14 @@ class ForecastioDataBlock(UnicodeMixin):
 
 class ForecastioDataPoint(UnicodeMixin):
 
-    def __init__(self, d=None):
-        d = d or {}
+    def __init__(self, d={}):
+        self.d = d
 
         try:
             self.time = datetime.datetime.fromtimestamp(int(d['time']))
+            self.utime = d['time']
         except:
-            self.time = None
-
-        self.utime = d.get('time')
-        self.icon = d.get('icon')
-        self.summary = d.get('summary')
+            pass
 
         try:
             sr_time = int(d['sunriseTime'])
@@ -88,31 +85,14 @@ class ForecastioDataPoint(UnicodeMixin):
         except:
             self.sunriseTime = None
 
+    def __getattr__(self, name):
         try:
-            ss_time = int(d['sunsetTime'])
-            self.sunsetTime = datetime.datetime.fromtimestamp(ss_time)
-        except:
-            self.sunsetTime = None
-
-        self.precipIntensity = d.get('precipIntensity')
-        self.precipIntensityMax = d.get('precipIntensityMax')
-        self.precipIntensityMaxTime = d.get('precipIntensityMaxTime')
-        self.precipProbability = d.get('precipProbability')
-        self.precipType = d.get('precipType')
-        self.precipAccumulation = d.get('precipAccumulation')
-        self.temperature = d.get('temperature')
-        self.temperatureMin = d.get('temperatureMin')
-        self.temperatureMinTime = d.get('temperatureMinTime')
-        self.temperatureMax = d.get('temperatureMax')
-        self.temperatureMaxTime = d.get('temperatureMaxTime')
-        self.dewPoint = d.get('dewPoint')
-        self.windspeed = d.get('windSpeed')
-        self.windbearing = d.get('windBearing')
-        self.cloudcover = d.get('cloudCover')
-        self.humidity = d.get('humidity')
-        self.pressure = d.get('pressure')
-        self.visibility = d.get('visibility')
-        self.ozone = d.get('ozone')
+            return self.d[name]
+        except KeyError:
+            raise PropertyUnavailable(
+                "Property '{}' is not valid"
+                " or is not avilable for this forecast".format(name)
+            )
 
     def __unicode__(self):
         return '<ForecastioDataPoint instance: ' \

@@ -1,6 +1,7 @@
 import json
 import unittest
 import forecastio
+from nose.tools import raises
 from mock import MagicMock
 
 
@@ -63,3 +64,8 @@ class forecastio_test(unittest.TestCase):
             "<ForecastioDataBlock instance: Drizzle until this evening. "
             "with 49 ForecastioDataPoints>"
         )
+
+    @raises(forecastio.utils.PropertyUnavailable)
+    def test_datapoint_attribute_not_available(self):
+        daily = self.fc.daily()
+        daily.data[0].notavailable

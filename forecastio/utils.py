@@ -12,3 +12,7 @@ class UnicodeMixin(object):
     else:  # Python 2
         def __str__(self):
             return self.__unicode__().encode('utf8')
+
+
+class PropertyUnavailable(AttributeError):
+    pass
