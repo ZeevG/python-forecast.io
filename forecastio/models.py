@@ -9,9 +9,10 @@ class Forecast(UnicodeMixin):
         self.response = response
         self.http_headers = headers
         self.json = data
-        self.alerts = []
-        for alertJSON in self.json['alerts']:
-            self.alerts.append(Alert(alertJSON))
+
+        self._alerts = []
+        for alertJSON in self.json.get('alerts', []):
+            self._alerts.append(Alert(alertJSON))
 
     def update(self):
         r = requests.get(self.response.url)
@@ -34,7 +35,7 @@ class Forecast(UnicodeMixin):
         return self.json['offset']
 
     def alerts(self):
-        return self.alerts
+        return self._alerts
 
     def _forcastio_data(self, key):
         keys = ['minutely', 'currently', 'hourly', 'daily']
@@ -105,18 +106,18 @@ class ForecastioDataPoint(UnicodeMixin):
                '%s at %s>' % (self.summary, self.time,)
 
 
-class Alert():
+class Alert(UnicodeMixin):
     def __init__(self, json):
         self.json = json
 
     def __getattr__(self, name):
         try:
             return self.json[name]
-        except:
-            raise AttributeError
+        except KeyError:
+            raise PropertyUnavailable(
+                "Property '{}' is not valid"
+                " or is not avilable for this forecast".format(name)
+            )
 
     def __unicode__(self):
         return '<Alert instance: {0} at {1}>'.format(self.title, self.time)
-
-    def __str__(self):
-        return unicode(self).encode('utf-8')

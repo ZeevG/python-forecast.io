@@ -8,7 +8,7 @@ from mock import MagicMock
 class BasicFunctionality(unittest.TestCase):
 
     def setUp(self):
-        mock_json = open('tests/test.json').read()
+        mock_json = open('tests/fixtures/test.json').read()
         mock_data = json.loads(mock_json)
         fc_mock_res = forecastio.models.Forecast(mock_data, '', '')
         forecastio.load_forecast = MagicMock(return_value=fc_mock_res)
@@ -77,11 +77,15 @@ class BasicFunctionality(unittest.TestCase):
 
         self.assertEqual(apprentTemp, 55.06)
 
+    def test_alerts_length(self):
+        alerts = self.fc.alerts()
+        self.assertEqual(len(alerts), 0)
+
 
 class ForecastsWithAlerts(unittest.TestCase):
 
     def setUp(self):
-        mock_json = open('tests/test.json').read()
+        mock_json = open('tests/fixtures/test_with_alerts.json').read()
         mock_data = json.loads(mock_json)
         fc_mock_res = forecastio.models.Forecast(mock_data, '', '')
         forecastio.load_forecast = MagicMock(return_value=fc_mock_res)
@@ -90,6 +94,52 @@ class ForecastsWithAlerts(unittest.TestCase):
         lng = 10.0
         self.fc = forecastio.load_forecast(api_key, lat, lng)
 
-    def test_current_temp(self):
-        fc_cur = self.fc.currently()
-        self.assertEqual(fc_cur.temperature, 55.81)
+    def test_alerts_length(self):
+        alerts = self.fc.alerts()
+        self.assertEqual(len(alerts), 2)
+
+    def test_alert_title(self):
+        alerts = self.fc.alerts()
+        first_alert = alerts[0]
+
+        self.assertEqual(
+            first_alert.title,
+            "Excessive Heat Warning for Inyo, CA"
+        )
+
+    def test_alert_uri(self):
+        alerts = self.fc.alerts()
+        first_alert = alerts[0]
+
+        self.assertEqual(
+            first_alert.uri,
+            "http://alerts.weather.gov/cap/wwacapget.php"
+            "?x=CA125159BB3908.ExcessiveHeatWarning."
+            "125159E830C0CA.VEFNPWVEF.8faae06d42ba631813492a6a6eae41bc"
+        )
+
+    @unittest.skip("Skipping untill timezone problems are sorted")
+    def test_alert_time(self):
+        alerts = self.fc.alerts()
+        first_alert = alerts[0]
+
+        self.assertEqual(
+            first_alert.time,
+            1402133400
+        )
+
+    @raises(forecastio.utils.PropertyUnavailable)
+    def test_alert_property_does_not_exist(self):
+        alerts = self.fc.alerts()
+        first_alert = alerts[0]
+
+        first_alert.notarealproperty
+
+    def test_alert_string_repr(self):
+        alerts = self.fc.alerts()
+        first_alert = alerts[0]
+
+        self.assertEqual(
+            first_alert.time,
+            1402133400
+        )
