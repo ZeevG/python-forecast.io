@@ -2,3 +2,4 @@ nose
 coverage
 coveralls
 mock
+geopy>=0.99,<=1.0
