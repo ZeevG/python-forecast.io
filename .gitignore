@@ -6,3 +6,4 @@ dist
 test.py
 MANIFEST
 *..private/
+private/*
