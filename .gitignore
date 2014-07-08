@@ -1,9 +1,6 @@
-*..idea/
-*.idea/
+.idea
 *.pyc
 .coverage
 dist
 test.py
 MANIFEST
-*..private/
-private/*

@@ -6,7 +6,7 @@ from forecastio.models import Forecast
 
 
 def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
-                  callback=None, solar=False):
+                  callback=None, custom=''):
 
     """
         This function builds the request url and loads some or all of the
@@ -45,8 +45,8 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
     else:
         baseURL = url
 
-    if solar:
-        baseURL = baseURL+'&solar'
+    if custom:
+        baseURL = baseURL+custom
 
     if callback is None:
         return make_forecast(make_request(baseURL))
