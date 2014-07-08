@@ -55,7 +55,6 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
                                kwargs={'callback': callback})
         thr.start()
 
-
 def make_forecast(response):
     return Forecast(response.json(), response, response.headers)
 
