@@ -7,7 +7,8 @@ from forecastio.models import Forecast
 
 
 def load_forecast(key, inLat=None, inLong=None, address=None,
-                  time=None, units="auto", lazy=False, callback=None):
+                  google_api_key=None, time=None, units="auto", lazy=False,
+                  callback=None):
 
     """
         This function builds the request url and loads some or all of the
@@ -17,6 +18,7 @@ def load_forecast(key, inLat=None, inLong=None, address=None,
         inLong: The longitude of the forecast
         address: A string address to then be geocoded into lnt/long.
                  Requires geopy.
+        google_api_key: Google API key for business users.
         time:   A datetime.datetime object representing the desired time of
                 the forecast
         units:  A string of the preferred units of measurement, "auto" id
@@ -29,9 +31,9 @@ def load_forecast(key, inLat=None, inLong=None, address=None,
     lat = inLat
     lng = inLong
     time = time
-    
+
     if address:
-        location, (lat, lng) = geocoders.GoogleV3().geocode(address)
+        location, (lat, lng) = geocoders.GoogleV3(api_key=google_api_key).geocode(address)
 
     if time is None:
         url = 'https://api.forecast.io/forecast/%s/%s,%s' \
