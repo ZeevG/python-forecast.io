@@ -92,6 +92,12 @@ class ForecastioDataPoint(UnicodeMixin):
         except:
             self.sunriseTime = None
 
+        try:
+            ss_time = int(d['sunsetTime'])
+            self.sunsetTime = datetime.datetime.fromtimestamp(ss_time)
+        except:
+            self.sunsetTime = None
+
     def __getattr__(self, name):
         try:
             return self.d[name]
