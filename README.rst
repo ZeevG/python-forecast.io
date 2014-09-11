@@ -2,7 +2,7 @@
 Forecast.io Wrapper
 *******************
 
-.. image:: https://travis-ci.org/ZeevG/python-forcast.io.svg?branch=master
+.. image:: https://travis-ci.org/ZeevG/python-forecast.io.svg?branch=master
 
 This is a wrapper for the forecast.io API. It allows you to get the weather for any location, now, in the past, or future.
 
