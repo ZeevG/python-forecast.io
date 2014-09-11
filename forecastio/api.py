@@ -6,7 +6,7 @@ from forecastio.models import Forecast
 
 
 def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
-                  callback=None):
+                  callback=None, custom=''):
 
     """
         This function builds the request url and loads some or all of the
@@ -21,6 +21,8 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
         lazy:   Defaults to false.  The function will only request the json
                 data as it is needed. Results in more requests, but
                 probably a faster response time (I haven't checked)
+        solar:  Defaults to true.  Results in irradiance data from beta version.
+
     """
 
     lat = inLat
@@ -43,13 +45,15 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
     else:
         baseURL = url
 
+    if custom:
+        baseURL = baseURL+custom
+
     if callback is None:
         return make_forecast(make_request(baseURL))
     else:
         thr = threading.Thread(target=load_async, args=(baseURL,),
                                kwargs={'callback': callback})
         thr.start()
-
 
 def make_forecast(response):
     return Forecast(response.json(), response, response.headers)
