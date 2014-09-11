@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Python-forecast.io : A thin Python Wrapper for the Forecast.io weather API">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Python-forecast.io</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ZeevG/python-forecast.io">View on GitHub</a>
+
+          <h1 id="project_title">Python-forecast.io</h1>
+          <h2 id="project_tagline">A thin Python Wrapper for the Forecast.io weather API</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ZeevG/python-forecast.io/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ZeevG/python-forecast.io/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>This is a wrapper for the forecast.io API. It allows you to get the weather for any location, now, in the past, or future.</p>
+
+<p>The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it’s very simple).</p>
+
+<h2>
+<a name="recent-changes" class="anchor" href="#recent-changes"><span class="octicon octicon-link"></span></a>Recent Changes</h2>
+
+<ul>
+<li>  python-forecastio is now available on PyPI.</li>
+<li>  <a href="http://docs.python-requests.org/en/latest/">Requests</a> is now used for HTTP/S requests. The main advantages are HTTPS support and GZip compression</li>
+<li>  Updates to the way load_forecast is used. This should make it easier to keep track of the state of your Forecast objects.</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>You can now use pip to install python-forecastio. To install <code>pip install python-forecastio</code> to remove <code>pip uninstall python-forecastio</code></p>
+
+<p>If you choose to install python-forecastio manually, it depends on the requests library (<a href="http://docs.python-requests.org">http://docs.python-requests.org</a>)</p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li>  You need an API key to use it (<a href="http://developer.forecast.io">http://developer.forecast.io</a>). Don’t worry a key is free.</li>
+</ul><h2>
+<a name="basic-use" class="anchor" href="#basic-use"><span class="octicon octicon-link"></span></a>Basic Use</h2>
+
+<p>Although you don’t need to know anything about the forecast.io API to use this module, their docs are available at <a href="http://developer.forecast.io">http://developer.forecast.io</a></p>
+
+<p>To use the wrapper:</p>
+
+<pre lang="sourceCode"><code>import forecastio
+
+api_key = "YOUR API KEY"
+lat = -31.967819
+lng = 115.87718
+
+forecast = forecastio.load_forecast(api_key, lat, lng)
+...
+</code></pre>
+
+<p>The <code>load_forecast()</code> method has a few optional parameters. Providing your API key, a latitude and longitude are the only required parameters.</p>
+
+<p>Use the <code>forecast.DataBlockType()</code> eg. <code>currently()</code>, <code>daily()</code>, <code>hourly()</code>, <code>minutely()</code> methods to load the data you are after.</p>
+
+<p>These methods return a DataBlock. Except <code>currently()</code> which returns a DataPoint.</p>
+
+<pre lang="sourceCode"><code>byHour = forecast.hourly()
+print byHour.summary
+print byHour.icon
+</code></pre>
+
+<p>The .data attributes for each DataBlock is a list of DataPoint objects. This is where all the good data is :)</p>
+
+<pre lang="sourceCode"><code>for hourlyData in byHour.data:
+    print hourlyData.temperature
+</code></pre>
+
+<h1>
+<a name="advanced" class="anchor" href="#advanced"><span class="octicon octicon-link"></span></a>Advanced</h1>
+
+<h2>
+<a name="forecastioload_forecastkey-latitude-longitude" class="anchor" href="#forecastioload_forecastkey-latitude-longitude"><span class="octicon octicon-link"></span></a>forecastio.load_forecast(key, latitude, longitude)</h2>
+
+<p>This makes an API request and returns a <strong>Forecast</strong> object (see below).</p>
+
+<p>Parameters:  </p>
+
+<ul>
+<li>  <strong>key</strong> - Your API key from <a href="https://developer.forecast.io/">https://developer.forecast.io/</a>
+</li>
+<li>  <strong>latitude</strong> - The latitude of the location for the forecast</li>
+<li>  <strong>longitude</strong> - The longitude of the location for the forecast</li>
+<li>  <strong>time</strong> - (optional) A datetime object for the forecast either in the past or future</li>
+<li>  <strong>units</strong> - (optional) A string of the preferred units of measurement, “auto” is the default. “us”,“ca”,“uk”,“si” are also available. See the API Docs <a href="https://developer.forecast.io/docs/v2">https://developer.forecast.io/docs/v2</a> for exactly what each unit means.</li>
+<li>  <strong>lazy</strong> - (optional) Defaults to false. If true the function will request the json data as it is needed. Results in more requests, but maybe a faster response time.</li>
+<li>  <strong>callback</strong> - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and <strong>will not return the forecast object directly</strong>, instead it will be passed to the callback function. Make sure it can accept it.</li>
+</ul><hr><h2>
+<a name="class-forecastiomodelsforecast" class="anchor" href="#class-forecastiomodelsforecast"><span class="octicon octicon-link"></span></a>
+<em>class</em> forecastio.models.Forecast</h2>
+
+<p>The <strong>Forecast</strong> object, it contains both weather data and the HTTP response from forecast.io</p>
+
+<p><strong>Attributes</strong>  </p>
+
+<ul>
+<li>
+<p><strong>response</strong>  </p>
+
+<ul>
+<li>  The Response object returned from requests request.get() method. See <a href="https://requests.readthedocs.org/en/latest/api/#requests.Response">https://requests.readthedocs.org/en/latest/api/#requests.Response</a>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>http_headers</strong>  </p>
+
+<ul>
+<li>  A dictionary of response headers. ‘X-Forecast-API-Calls’ might be of interest, it contains the number of API calls made by the given API key for today.</li>
+</ul>
+</li>
+<li>
+<p><strong>json</strong>  </p>
+
+<ul>
+<li>  A dictionary containing the json data returned from the API call.</li>
+</ul>
+</li>
+</ul><p><strong>Methods</strong>  </p>
+
+<ul>
+<li>
+<p><strong>currently()</strong>  </p>
+
+<ul>
+<li>  Returns a ForecastioDataPoint object</li>
+</ul>
+</li>
+<li>
+<p><strong>minutely()</strong>  </p>
+
+<ul>
+<li>  Returns a ForecastioDataBlock object</li>
+</ul>
+</li>
+<li>
+<p><strong>hourly()</strong>  </p>
+
+<ul>
+<li>  Returns a ForecastioDataBlock object</li>
+</ul>
+</li>
+<li>
+<p><strong>daily()</strong>  </p>
+
+<ul>
+<li>  Returns a ForecastioDataBlock object</li>
+</ul>
+</li>
+<li>
+<p><strong>update()</strong>  </p>
+
+<ul>
+<li>  Refreshes the forecast data by making a new request.</li>
+</ul>
+</li>
+</ul><hr><h2>
+<a name="class-forecastiomodelsforecastiodatablock" class="anchor" href="#class-forecastiomodelsforecastiodatablock"><span class="octicon octicon-link"></span></a>
+<em>class</em> forecastio.models.ForecastioDataBlock</h2>
+
+<p>Contains data about a forecast over time.</p>
+
+<p><strong>Attributes</strong> <em>(descriptions taken from the forecast.io website)</em>  </p>
+
+<ul>
+<li>
+<p><strong>summary</strong>  </p>
+
+<ul>
+<li>  A human-readable text summary of this data block.</li>
+</ul>
+</li>
+<li>
+<p><strong>icon</strong>  </p>
+
+<ul>
+<li>  A machine-readable text summary of this data block.</li>
+</ul>
+</li>
+<li>
+<p><strong>data</strong>  </p>
+
+<ul>
+<li>  An array of <strong>ForecastioDataPoint</strong> objects (see below), ordered by time, which together describe the weather conditions at the requested location over time.</li>
+</ul>
+</li>
+</ul><hr><h1>
+<a name="class-forecastiomodelsforecastiodatapoint" class="anchor" href="#class-forecastiomodelsforecastiodatapoint"><span class="octicon octicon-link"></span></a>
+<em>class</em> forecastio.models.ForecastioDataPoint</h1>
+
+<p>Contains data about a forecast at a particular time.</p>
+
+<p>Data points have many attributes, but <strong>not all of them are always available</strong>. Some commonly used ones are:</p>
+
+<p><strong>Attributes</strong> <em>(descriptions taken from the forecast.io website)</em>  </p>
+
+<ul>
+<li>  <strong>summary</strong>
+
+<ul>
+<li>A human-readable text summary of this data block.</li>
+</ul>
+</li>
+<li>  <strong>icon</strong>
+
+<ul>
+<li>A machine-readable text summary of this data block.</li>
+</ul>
+</li>
+<li>  <strong>time</strong>
+
+<ul>
+<li>The time at which this data point occurs.</li>
+</ul>
+</li>
+<li>  <strong>temperature</strong>
+
+<ul>
+<li>(not defined on daily data points): A numerical value representing the temperature at the given time.</li>
+</ul>
+</li>
+<li>  <strong>precipProbability</strong>
+
+<ul>
+<li>  A numerical value between 0 and 1 (inclusive) representing the probability of precipitation occurring at the given time.</li>
+</ul>
+</li>
+</ul><p>For a full list of ForecastioDataPoint attributes and attribute descriptions, take a look at the forecast.io data point documentation (<a href="https://developer.forecast.io/docs/v2#data-points">https://developer.forecast.io/docs/v2#data-points</a>)</p>
+
+<h2>
+<a name="projects-using-this-library" class="anchor" href="#projects-using-this-library"><span class="octicon octicon-link"></span></a>Projects Using This Library</h2>
+
+<blockquote>
+<ul>
+<li>  <a href="http://biodata.io">Biodata.io</a>
+</li>
+</ul>
+</blockquote>
+
+<p>If you use this wrapper for something cool, send me and email and I will include your project.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Python-forecast.io maintained by <a href="https://github.com/ZeevG">ZeevG</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
