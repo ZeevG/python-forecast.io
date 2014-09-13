@@ -57,6 +57,18 @@ To use the wrapper:
 
 	forecast = forecastio.load_forecast(api_key, lat, lng)
 	...
+        
+In addition, you can call the API using a simple address.  This gets geocoded using Geopy.
+
+.. code-block:: python
+
+        import forecastio
+
+	api_key = "YOUR API KEY"
+	address = 'New York City, NY'
+        
+	forecast = forecastio.load_forecast(api_key, address=address)
+	... 
 
 The ``load_forecast()`` method has a few optional parameters. Providing your API key, a latitude and longitude are the only required parameters.
 

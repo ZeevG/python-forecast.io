@@ -15,7 +15,8 @@ class BasicFunctionality(unittest.TestCase):
         api_key = "foo"
         lat = 50.0
         lng = 10.0
-        self.fc = forecastio.load_forecast(api_key, lat, lng)
+        address = 'Bavaria, Germany'
+        self.fc = forecastio.load_forecast(api_key, lat, lng, address=address)
 
     def test_current_temp(self):
         fc_cur = self.fc.currently()

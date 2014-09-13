@@ -1,15 +1,10 @@
 import forecastio
 import datetime
 
+API_KEY = "YOUR_KEY"
 
-def main():
 
-
-    api_key = "YOUR API KEY"
-    lat = -31.967819
-    lng = 115.87718
-
-    forecast = forecastio.load_forecast(api_key, lat, lng)
+def main(forecast):
 
     print forecast.hourly().data[0].temperature
     print "===========Hourly Data========="
@@ -27,5 +22,19 @@ def main():
         print daily_data_point
 
 
+def data_with_lat_lng():
+    lat = -31.967819
+    lng = 115.87718
+    print("Forecast with Lat/Lng Specified")
+    return forecastio.load_forecast(API_KEY, lat, lng)
+
+
+def data_with_address():
+    address = 'New York City, NY'
+    print("A forecast generated with geocoding.")
+    return forecastio.load_forecast(API_KEY, address=address) 
+
+
 if __name__ == "__main__":
-    main()
+    main(data_with_lat_lng())
+    main(data_with_address())

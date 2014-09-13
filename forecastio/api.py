@@ -1,11 +1,13 @@
 import requests
 import time as Time
 import threading
+from geopy import geocoders
 
 from forecastio.models import Forecast
 
 
-def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
+def load_forecast(key, inLat=None, inLong=None, address=None,
+                  google_api_key=None, time=None, units="auto", lazy=False,
                   callback=None):
 
     """
@@ -14,6 +16,9 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
 
         inLat:  The latitude of the forecast
         inLong: The longitude of the forecast
+        address: A string address to then be geocoded into lnt/long.
+                 Requires geopy.
+        google_api_key: Google API key for business users.
         time:   A datetime.datetime object representing the desired time of
                 the forecast
         units:  A string of the preferred units of measurement, "auto" id
@@ -26,6 +31,9 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
     lat = inLat
     lng = inLong
     time = time
+
+    if address:
+        location, (lat, lng) = geocoders.GoogleV3(api_key=google_api_key).geocode(address)
 
     if time is None:
         url = 'https://api.forecast.io/forecast/%s/%s,%s' \
