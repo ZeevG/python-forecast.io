@@ -15,17 +15,20 @@
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/ZeevG/python-forecast.io">View on GitHub</a>
+        <div class="gradient">
+          <header class="inner">
+            <a id="forkme_banner" href="https://github.com/ZeevG/python-forecast.io">View on GitHub</a>
+            <div class="title">
+              <h1 id="project_title">Python-forecast.io</h1>
+              <h2 id="project_tagline">A thin Python Wrapper for the Forecast.io weather API</h2>
+            </div>
 
-          <h1 id="project_title">Python-forecast.io</h1>
-          <h2 id="project_tagline">A thin Python Wrapper for the Forecast.io weather API</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/ZeevG/python-forecast.io/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/ZeevG/python-forecast.io/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+              <section id="downloads">
+                <a class="zip_download_link" href="https://github.com/ZeevG/python-forecast.io/zipball/master">Download this project as a .zip file</a>
+                <a class="tar_download_link" href="https://github.com/ZeevG/python-forecast.io/tarball/master">Download this project as a tar.gz file</a>
+              </section>
+          </header>
+        </div>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -36,18 +39,9 @@
 <p>The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it’s very simple).</p>
 
 <h2>
-<a name="recent-changes" class="anchor" href="#recent-changes"><span class="octicon octicon-link"></span></a>Recent Changes</h2>
-
-<ul>
-<li>  python-forecastio is now available on PyPI.</li>
-<li>  <a href="http://docs.python-requests.org/en/latest/">Requests</a> is now used for HTTP/S requests. The main advantages are HTTPS support and GZip compression</li>
-<li>  Updates to the way load_forecast is used. This should make it easier to keep track of the state of your Forecast objects.</li>
-</ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>You can now use pip to install python-forecastio. To install <code>pip install python-forecastio</code> to remove <code>pip uninstall python-forecastio</code></p>
-
-<p>If you choose to install python-forecastio manually, it depends on the requests library (<a href="http://docs.python-requests.org">http://docs.python-requests.org</a>)</p>
+<p>You should use pip to install python-forecastio. To install <code>pip install python-forecastio</code> to remove <code>pip uninstall python-forecastio</code>. Simple!</p>
 
 <h2>
 <a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
@@ -87,12 +81,12 @@ print byHour.icon
 <pre lang="sourceCode"><code>for hourlyData in byHour.data:
     print hourlyData.temperature
 </code></pre>
-
-<h1>
-<a name="advanced" class="anchor" href="#advanced"><span class="octicon octicon-link"></span></a>Advanced</h1>
-
+<br>
 <h2>
-<a name="forecastioload_forecastkey-latitude-longitude" class="anchor" href="#forecastioload_forecastkey-latitude-longitude"><span class="octicon octicon-link"></span></a>forecastio.load_forecast(key, latitude, longitude)</h2>
+<a name="advanced" class="anchor" href="#advanced"><span class="octicon octicon-link"></span></a>Advanced</h2>
+<span class="octicon octicon-link"></span>
+<h3>
+<a name="forecastioload_forecastkey-latitude-longitude" class="anchor" href="#forecastioload_forecastkey-latitude-longitude"><span class="octicon octicon-link"></span></a><em>function</em> forecastio.load_forecast(key, latitude, longitude)</h3>
 
 <p>This makes an API request and returns a <strong>Forecast</strong> object (see below).</p>
 
@@ -107,9 +101,9 @@ print byHour.icon
 <li>  <strong>units</strong> - (optional) A string of the preferred units of measurement, “auto” is the default. “us”,“ca”,“uk”,“si” are also available. See the API Docs <a href="https://developer.forecast.io/docs/v2">https://developer.forecast.io/docs/v2</a> for exactly what each unit means.</li>
 <li>  <strong>lazy</strong> - (optional) Defaults to false. If true the function will request the json data as it is needed. Results in more requests, but maybe a faster response time.</li>
 <li>  <strong>callback</strong> - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and <strong>will not return the forecast object directly</strong>, instead it will be passed to the callback function. Make sure it can accept it.</li>
-</ul><hr><h2>
+</ul><hr><h3>
 <a name="class-forecastiomodelsforecast" class="anchor" href="#class-forecastiomodelsforecast"><span class="octicon octicon-link"></span></a>
-<em>class</em> forecastio.models.Forecast</h2>
+<em>class</em> forecastio.models.Forecast</h3>
 
 <p>The <strong>Forecast</strong> object, it contains both weather data and the HTTP response from forecast.io</p>
 
@@ -176,9 +170,9 @@ print byHour.icon
 <li>  Refreshes the forecast data by making a new request.</li>
 </ul>
 </li>
-</ul><hr><h2>
+</ul><hr><h3>
 <a name="class-forecastiomodelsforecastiodatablock" class="anchor" href="#class-forecastiomodelsforecastiodatablock"><span class="octicon octicon-link"></span></a>
-<em>class</em> forecastio.models.ForecastioDataBlock</h2>
+<em>class</em> forecastio.models.ForecastioDataBlock</h3>
 
 <p>Contains data about a forecast over time.</p>
 
@@ -206,9 +200,9 @@ print byHour.icon
 <li>  An array of <strong>ForecastioDataPoint</strong> objects (see below), ordered by time, which together describe the weather conditions at the requested location over time.</li>
 </ul>
 </li>
-</ul><hr><h1>
+</ul><hr><h3>
 <a name="class-forecastiomodelsforecastiodatapoint" class="anchor" href="#class-forecastiomodelsforecastiodatapoint"><span class="octicon octicon-link"></span></a>
-<em>class</em> forecastio.models.ForecastioDataPoint</h1>
+<em>class</em> forecastio.models.ForecastioDataPoint</h3>
 
 <p>Contains data about a forecast at a particular time.</p>
 
@@ -249,8 +243,8 @@ print byHour.icon
 </li>
 </ul><p>For a full list of ForecastioDataPoint attributes and attribute descriptions, take a look at the forecast.io data point documentation (<a href="https://developer.forecast.io/docs/v2#data-points">https://developer.forecast.io/docs/v2#data-points</a>)</p>
 
-<h2>
-<a name="projects-using-this-library" class="anchor" href="#projects-using-this-library"><span class="octicon octicon-link"></span></a>Projects Using This Library</h2>
+<h3>
+<a name="projects-using-this-library" class="anchor" href="#projects-using-this-library"><span class="octicon octicon-link"></span></a>Projects Using This Library</h3>
 
 <blockquote>
 <ul>

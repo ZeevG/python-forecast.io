@@ -285,16 +285,25 @@ Full-Width Styles
 }
 
 #header_wrap {
-  background: #212121;
-  background: -moz-linear-gradient(top, #373737, #212121);
-  background: -webkit-linear-gradient(top, #373737, #212121);
-  background: -ms-linear-gradient(top, #373737, #212121);
-  background: -o-linear-gradient(top, #373737, #212121);
-  background: linear-gradient(top, #373737, #212121);
+  background: #373737;
+  background-size:cover;
+  background-image: url('../images/island.jpg');
+}
+#header_wrap .gradient {
+  height: 100%;
+  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 35%, rgba(0, 0, 0, 0.5) 90%);
+  background-image: linear-gradient(to top,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 35%, rgba(0, 0, 0, 0.5) 90%);
+}
+#header_wrap .title {
+  margin-left: 50px;
+  padding: 30px;
+  max-width: 600px;
+
 }
 
 #header_wrap .inner {
-  padding: 50px 10px 30px 10px;
+  padding: 50px 10px 150px 10px;
+  max-width: 1000px;
 }
 
 #project_title {
