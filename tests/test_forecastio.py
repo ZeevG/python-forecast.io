@@ -1,21 +1,24 @@
-import json
 import unittest
+import time
 import forecastio
+
 from nose.tools import raises
-from mock import MagicMock
+from mock import patch
+
+from requests import Response
 
 
 class BasicFunctionality(unittest.TestCase):
 
     def setUp(self):
-        mock_json = open('tests/fixtures/test.json').read()
-        mock_data = json.loads(mock_json)
-        fc_mock_res = forecastio.models.Forecast(mock_data, '', '')
-        forecastio.load_forecast = MagicMock(return_value=fc_mock_res)
-        api_key = "foo"
-        lat = 50.0
-        lng = 10.0
-        self.fc = forecastio.load_forecast(api_key, lat, lng)
+        with patch('requests.get') as http_request:
+            resp = Response()
+            resp._content = open('tests/fixtures/test.json').read()
+            http_request.return_value = resp
+            api_key = "foo"
+            lat = 50.0
+            lng = 10.0
+            self.fc = forecastio.load_forecast(api_key, lat, lng)
 
     def test_current_temp(self):
         fc_cur = self.fc.currently()
@@ -85,14 +88,14 @@ class BasicFunctionality(unittest.TestCase):
 class ForecastsWithAlerts(unittest.TestCase):
 
     def setUp(self):
-        mock_json = open('tests/fixtures/test_with_alerts.json').read()
-        mock_data = json.loads(mock_json)
-        fc_mock_res = forecastio.models.Forecast(mock_data, '', '')
-        forecastio.load_forecast = MagicMock(return_value=fc_mock_res)
-        api_key = "foo"
-        lat = 50.0
-        lng = 10.0
-        self.fc = forecastio.load_forecast(api_key, lat, lng)
+        with patch('requests.get') as http_request:
+            resp = Response()
+            resp._content = open('tests/fixtures/test_with_alerts.json').read()
+            http_request.return_value = resp
+            api_key = "foo"
+            lat = 50.0
+            lng = 10.0
+            self.fc = forecastio.load_forecast(api_key, lat, lng)
 
     def test_alerts_length(self):
         alerts = self.fc.alerts()
@@ -143,3 +146,46 @@ class ForecastsWithAlerts(unittest.TestCase):
             first_alert.time,
             1402133400
         )
+
+
+class BasicWithCallback(unittest.TestCase):
+
+    def setUp(self):
+        self.forecast = None
+        with patch('requests.get') as http_request:
+            resp = Response()
+            resp._content = open('tests/fixtures/test.json').read()
+            http_request.return_value = resp
+            api_key = "foo"
+            lat = 50.0
+            lng = 10.0
+            self.fc = forecastio.load_forecast(api_key, lat, lng,
+                                               callback=self.im_the_callback)
+
+    def im_the_callback(self, forecast):
+        self.forecast = forecast
+
+    def wait_for_forecast(self, max_wait=0.5):
+
+        elapsed_count = 0.0
+        while self.forecast is None:
+            if elapsed_count > max_wait:
+                raise Exception("Waiting for callback has timed out")
+
+            wait_time = 0.1
+            time.sleep(wait_time)
+            elapsed_count += wait_time
+
+    def test_current_temp(self):
+        self.wait_for_forecast()
+
+        fc_cur = self.forecast.currently()
+        self.assertEqual(fc_cur.temperature, 55.81)
+
+    def test_datablock_summary(self):
+        self.wait_for_forecast()
+
+        hourl_data = self.forecast.hourly()
+        self.assertEqual(hourl_data.summary, "Drizzle until this evening.")
+
+

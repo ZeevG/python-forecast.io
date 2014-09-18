@@ -7,7 +7,6 @@ from forecastio.models import Forecast
 
 def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
                   callback=None):
-
     """
         This function builds the request url and loads some or all of the
         needed json depending on lazy is True
@@ -43,21 +42,26 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
     else:
         baseURL = url
 
+    return manual(baseURL, callback=callback)
+
+
+def manual(requestURL, callback=None):
     if callback is None:
-        return make_forecast(make_request(baseURL))
+        return get_forecast(requestURL)
     else:
-        thr = threading.Thread(target=load_async, args=(baseURL,),
-                               kwargs={'callback': callback})
-        thr.start()
+        thread = threading.Thread(target=load_async,
+                                  args=(requestURL, callback))
+        thread.start()
 
 
-def make_forecast(response):
-    return Forecast(response.json(), response, response.headers)
+def get_forecast(requestURL):
+    forecastio_reponse = requests.get(requestURL)
 
+    json = forecastio_reponse.json()
+    headers = forecastio_reponse.headers
 
-def make_request(url):
-    return requests.get(url)
+    return Forecast(json, forecastio_reponse, headers)
 
 
 def load_async(url, callback):
-    callback(make_forecast(make_request(url)))
+    callback(get_forecast(url))
