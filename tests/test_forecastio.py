@@ -1,24 +1,28 @@
 import unittest
-import time
+import responses
+
 import forecastio
 
 from nose.tools import raises
-from mock import patch
-
-from requests import Response
 
 
 class BasicFunctionality(unittest.TestCase):
 
+    @responses.activate
     def setUp(self):
-        with patch('requests.get') as http_request:
-            resp = Response()
-            resp._content = open('tests/fixtures/test.json').read()
-            http_request.return_value = resp
-            api_key = "foo"
-            lat = 50.0
-            lng = 10.0
-            self.fc = forecastio.load_forecast(api_key, lat, lng)
+        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        responses.add(responses.GET, URL,
+                      body=open('tests/fixtures/test.json').read(),
+                      status=200,
+                      content_type='application/json',
+                      match_querystring=True)
+
+        api_key = "foo"
+        lat = 50.0
+        lng = 10.0
+        self.fc = forecastio.load_forecast(api_key, lat, lng)
+
+        self.assertEqual(responses.calls[0].request.url, URL)
 
     def test_current_temp(self):
         fc_cur = self.fc.currently()
@@ -87,15 +91,19 @@ class BasicFunctionality(unittest.TestCase):
 
 class ForecastsWithAlerts(unittest.TestCase):
 
+    @responses.activate
     def setUp(self):
-        with patch('requests.get') as http_request:
-            resp = Response()
-            resp._content = open('tests/fixtures/test_with_alerts.json').read()
-            http_request.return_value = resp
-            api_key = "foo"
-            lat = 50.0
-            lng = 10.0
-            self.fc = forecastio.load_forecast(api_key, lat, lng)
+        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        responses.add(responses.GET, URL,
+                      body=open('tests/fixtures/test_with_alerts.json').read(),
+                      status=200,
+                      content_type='application/json',
+                      match_querystring=True)
+
+        api_key = "foo"
+        lat = 50.0
+        lng = 10.0
+        self.fc = forecastio.load_forecast(api_key, lat, lng)
 
     def test_alerts_length(self):
         alerts = self.fc.alerts()
@@ -149,43 +157,33 @@ class ForecastsWithAlerts(unittest.TestCase):
 
 
 class BasicWithCallback(unittest.TestCase):
+    pass
+    """
+    Would like to test this in the future
+    Not sure how to handle mocking responses in a new thread yet
+    """
 
+
+class BasicManualURL(unittest.TestCase):
+
+    @responses.activate
     def setUp(self):
-        self.forecast = None
-        with patch('requests.get') as http_request:
-            resp = Response()
-            resp._content = open('tests/fixtures/test.json').read()
-            http_request.return_value = resp
-            api_key = "foo"
-            lat = 50.0
-            lng = 10.0
-            self.fc = forecastio.load_forecast(api_key, lat, lng,
-                                               callback=self.im_the_callback)
 
-    def im_the_callback(self, forecast):
-        self.forecast = forecast
+        URL = "http://test_url.com/"
+        responses.add(responses.GET, URL,
+                      body=open('tests/fixtures/test.json').read(),
+                      status=200,
+                      content_type='application/json',
+                      match_querystring=True)
 
-    def wait_for_forecast(self, max_wait=0.5):
-
-        elapsed_count = 0.0
-        while self.forecast is None:
-            if elapsed_count > max_wait:
-                raise Exception("Waiting for callback has timed out")
-
-            wait_time = 0.1
-            time.sleep(wait_time)
-            elapsed_count += wait_time
+        self.forecast = forecastio.manual("http://test_url.com/")
 
     def test_current_temp(self):
-        self.wait_for_forecast()
 
         fc_cur = self.forecast.currently()
         self.assertEqual(fc_cur.temperature, 55.81)
 
     def test_datablock_summary(self):
-        self.wait_for_forecast()
 
         hourl_data = self.forecast.hourly()
         self.assertEqual(hourl_data.summary, "Drizzle until this evening.")
-
-
