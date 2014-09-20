@@ -6,33 +6,17 @@ Forecast.io Wrapper
 
 This is a wrapper for the forecast.io API. It allows you to get the weather for any location, now, in the past, or future.
 
-Projects Using This Library
-###########################
- - `Biodata.io <http://biodata.io>`_
-
-If you use this wrapper for something cool, send me and email and I will include your project
-
-I was originally looking for a good python weather API to use in another project. When I struggled to find anything I liked, I decided to write this one.
-
-The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it's very simple).
-
-Recent Changes
-##############
-
-- python-forecastio is now available on PyPI.
-
-- `Requests <http://docs.python-requests.org/en/latest/>`_ is now used for HTTP/S requests. The main advantages are HTTPS support and GZip compression
-
-- Updates to the way load_forecast is used. This should make it easier to keep track of the state of your Forecast objects.
+The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it’s very simple).
 
 
 Installation
 ############
+You should use pip to install python-forecastio.
 
-You can now use pip to install python-forecastio. To install ``pip install python-forecastio`` to remove ``pip uninstall python-forecastio``
+* To install pip install python-forecastio
+* To remove pip uninstall python-forecastio
 
-If you choose to install python-forecastio manually, it depends on the requests library (http://docs.python-requests.org)
-
+Simple!
 
 Requirements
 ############
@@ -83,7 +67,7 @@ The .data attributes for each DataBlock is a list of DataPoint objects. This is 
 Advanced
 ########
 
-forecastio.load_forecast(key, latitude, longitude)
+*function* forecastio.load_forecast(key, latitude, longitude)
 ---------------------------------------------------
 
 This makes an API request and returns a **Forecast** object (see below).
@@ -98,6 +82,17 @@ Parameters:
 	- **callback** - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
 
 ----------------------------------------------------
+
+
+*function* forecastio.manual(url)
+----------------------------------------------------
+This function allows manual creation of the URL for the Forecast.io API request.  This method won't be required often but can be used to take advantage of new or beta features of the API which this wrapper does not support yet. Returns a **Forecast** object (see below).
+
+Parameters:
+    	- **callback** - (optional) Pass a function to be used as a callback. If used, an asynchronous HTTP call will be used and ``forecastio.manual`` **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
+
+----------------------------------------------------
+
 
 *class* forecastio.models.Forecast
 ------------------------------------
