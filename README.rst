@@ -89,6 +89,7 @@ Parameters:
 This function allows manual creation of the URL for the Forecast.io API request.  This method won't be required often but can be used to take advantage of new or beta features of the API which this wrapper does not support yet. Returns a **Forecast** object (see below).
 
 Parameters:
+        - **url** - The URL which the wrapper will attempt build a forecast from.
     	- **callback** - (optional) Pass a function to be used as a callback. If used, an asynchronous HTTP call will be used and ``forecastio.manual`` **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
 
 ----------------------------------------------------
