@@ -5,7 +5,7 @@ import threading
 from forecastio.models import Forecast
 
 
-def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
+def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
                   callback=None):
     """
         This function builds the request url and loads some or all of the
@@ -21,10 +21,6 @@ def load_forecast(key, inLat, inLong, time=None, units="auto", lazy=False,
                 data as it is needed. Results in more requests, but
                 probably a faster response time (I haven't checked)
     """
-
-    lat = inLat
-    lng = inLong
-    time = time
 
     if time is None:
         url = 'https://api.forecast.io/forecast/%s/%s,%s' \
