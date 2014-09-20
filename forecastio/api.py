@@ -42,6 +42,11 @@ def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
 
 
 def manual(requestURL, callback=None):
+    """
+        This fuction is used by load_forecast OR by users to manually
+        construct the URL for an API call.
+    """
+
     if callback is None:
         return get_forecast(requestURL)
     else:
