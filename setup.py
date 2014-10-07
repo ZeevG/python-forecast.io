@@ -1,7 +1,6 @@
 import os
 import sys
 
-import forecastio
 try:
     from setuptools import setup
 except ImportError:
@@ -17,7 +16,7 @@ def read(fname):
 
 setup(
     name="python-forecastio",
-    version=forecastio.__version__,
+    version="1.3.1",
     author="Ze'ev Gilovitz",
     author_email="zeev.gil@gmail.com",
     description=("A thin Python Wrapper for the Forecast.io weather API"),
