@@ -44,14 +44,14 @@ def manual(requestURL, callback=None):
     """
 
     if callback is None:
-        return get_forecast(requestURL)
+        return _make_request(requestURL)
     else:
-        thread = threading.Thread(target=load_async,
+        thread = threading.Thread(target=_async_wrapper,
                                   args=(requestURL, callback))
         thread.start()
 
 
-def get_forecast(requestURL):
+def _make_request(requestURL):
     forecastio_reponse = requests.get(requestURL)
 
     json = forecastio_reponse.json()
@@ -60,5 +60,5 @@ def get_forecast(requestURL):
     return Forecast(json, forecastio_reponse, headers)
 
 
-def load_async(url, callback):
-    callback(get_forecast(url))
+def _async_wrapper(url, callback):
+    callback(_make_request(url))
