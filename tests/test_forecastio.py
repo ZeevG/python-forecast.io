@@ -10,7 +10,7 @@ class BasicFunctionality(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.forecast.io/forecast/foo/50.0,10.0"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -89,11 +89,36 @@ class BasicFunctionality(unittest.TestCase):
         self.assertEqual(len(alerts), 0)
 
 
+class UsingOptions(unittest.TestCase):
+
+    @responses.activate
+    def test_units(self):
+        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        responses.add(responses.GET, URL,
+                      body=open('tests/fixtures/test.json').read(),
+                      status=200,
+                      content_type='application/json',
+                      match_querystring=True)
+
+        api_key = "foo"
+        lat = 50.0
+        lng = 10.0
+        options = {'units': 'auto'}
+        self.fc = forecastio.load_forecast(api_key, lat, lng, options=options)
+
+        # Check the expected url was called.
+        self.assertEqual(responses.calls[0].request.url, URL)
+
+        # Check the resulting forecast object is accessible
+        fc_cur = self.fc.currently()
+        self.assertEqual(fc_cur.temperature, 55.81)
+
+
 class ForecastsWithAlerts(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.forecast.io/forecast/foo/50.0,10.0"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test_with_alerts.json').read(),
                       status=200,
