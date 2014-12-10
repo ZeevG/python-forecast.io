@@ -18,7 +18,7 @@ def load_forecast(key, lat, lng, time=None, options=None):
 
     url = build_url(key, lat, lng, time, options)
 
-    return manual(url, callback=None)
+    return manual(url)
 
 
 def load_forecast_async(key, lat, lng, callback, time=None, options=None):
@@ -34,21 +34,27 @@ def load_forecast_async(key, lat, lng, callback, time=None, options=None):
 
     url = build_url(key, lat, lng, time, options)
 
-    return manual(url, callback)
+    return manual_async(url, callback)
 
 
-def manual(requestURL, callback=None):
+def manual(requestURL):
     """
         This fuction is used by load_forecast OR by users to manually
         construct the URL for an API call.
     """
 
-    if callback is None:
-        return _make_request(requestURL)
-    else:
-        thread = threading.Thread(target=_async_wrapper,
-                                  args=(requestURL, callback))
-        thread.start()
+    return _make_request(requestURL)
+
+
+def manual_async(requestURL, callback):
+    """
+        This fuction is used by load_forecast_async OR by users to manually
+        construct the URL for an API call.
+    """
+
+    thread = threading.Thread(target=_async_wrapper,
+                              args=(requestURL, callback))
+    thread.start()
 
 
 def _make_request(requestURL):
