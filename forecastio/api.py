@@ -1,12 +1,12 @@
 import requests
-import time as Time
 import threading
 
+from forecastio.utils import build_url
 from forecastio.models import Forecast
 
 
 def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
-                  callback=None):
+                  callback=None, options=None):
     """
         This function builds the request url and loads some or all of the
         needed json depending on lazy is True
@@ -22,23 +22,9 @@ def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
                 probably a faster response time (I haven't checked)
     """
 
-    if time is None:
-        url = 'https://api.forecast.io/forecast/%s/%s,%s' \
-              '?units=%s' % (key, lat, lng, units,)
-    else:
-        url_time = str(int(Time.mktime(time.timetuple())))
-        url = 'https://api.forecast.io/forecast/%s/%s,%s,%s' \
-              '?units=%s' % (key, lat, lng, url_time,
-              units,)
+    url = build_url(key, lat, lng, time, options)
 
-    if lazy is True:
-        baseURL = "%s&exclude=%s" % (url,
-                                     'minutely,currently,hourly,'
-                                     'daily,alerts,flags')
-    else:
-        baseURL = url
-
-    return manual(baseURL, callback=callback)
+    return manual(url, callback=callback)
 
 
 def manual(requestURL, callback=None):
