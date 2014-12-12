@@ -20,8 +20,7 @@ class BasicFunctionality(unittest.TestCase):
         api_key = "foo"
         lat = 50.0
         lng = 10.0
-        address = 'Bavaria, Germany'
-        self.fc = forecastio.load_forecast(api_key, lat, lng, address=address)
+        self.fc = forecastio.load_forecast(api_key, lat, lng)
 
         self.assertEqual(responses.calls[0].request.url, URL)
 
@@ -111,6 +110,26 @@ class UsingOptions(unittest.TestCase):
         self.assertEqual(responses.calls[0].request.url, URL)
 
         # Check the resulting forecast object is accessible
+        fc_cur = self.fc.currently()
+        self.assertEqual(fc_cur.temperature, 55.81)
+
+
+class Geocode(unittest.TestCase):
+
+    @responses.activate
+    def test_geocoding(self):
+        URL = "https://api.forecast.io/forecast/foo/50.0,10.0"
+        responses.add(responses.GET, URL,
+                      body=open('tests/fixtures/test.json').read(),
+                      status=200,
+                      content_type='application/json',
+                      match_querystring=True)
+
+        api_key = "foo"
+        address = 'Bavaria, Germany'
+        self.fc = forecastio.geocode(api_key, address)
+        self.assertEqual(responses.calls[0].request.url, URL)
+
         fc_cur = self.fc.currently()
         self.assertEqual(fc_cur.temperature, 55.81)
 
