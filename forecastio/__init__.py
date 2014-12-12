@@ -1,1 +1,1 @@
-from forecastio.api import load_forecast, manual
+from forecastio.api import load_forecast, manual, geocode

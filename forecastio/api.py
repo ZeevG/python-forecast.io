@@ -1,8 +1,38 @@
 import requests
 import threading
 
+from geopy import geocoders
+
 from forecastio.utils import build_url
 from forecastio.models import Forecast
+
+
+def geocode(key, address, time=None, options=None, google_api_key=None):
+    """
+        address: A string address to then be geocoded into lnt/long.
+             Requires geopy.
+        google_api_key: Google API key for business users.
+    """
+
+    location, (lat, lng) = geocoders.GoogleV3(api_key=google_api_key).geocode(address)
+
+    url = build_url(key, lat, lng, time, options)
+
+    return manual(url)
+
+
+def geocode_async(key, address, callback, time=None, options=None, google_api_key=None):
+    """
+        address: A string address to then be geocoded into lnt/long.
+             Requires geopy.
+        google_api_key: Google API key for business users.
+    """
+
+    location, (lat, lng) = geocoders.GoogleV3(api_key=google_api_key).geocode(address)
+
+    url = build_url(key, lat, lng, time, options)
+
+    return manual_async(url, callback)
 
 
 def load_forecast(key, lat, lng, time=None, options=None):
