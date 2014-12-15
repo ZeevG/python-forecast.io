@@ -19,17 +19,15 @@ class PropertyUnavailable(AttributeError):
     pass
 
 
-def build_url(key, lat, lng, time=None, options=None):
+def build_url(key, lat, lng, datetime=None, options=None):
 
-    if time is None:
+    if datetime is None:
         url = "https://api.forecast.io/forecast/{0}/{1},{2}".format(
             key, lat, lng
         )
-
     else:
-        url_time = str(int(Time.mktime(time.timetuple())))
         url = "https://api.forecast.io/forecast/{0}/{1},{2},{3}".format(
-            key, lat, lng, url_time
+            key, lat, lng, datetime
         )
 
     # Generate Query String

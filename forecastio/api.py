@@ -15,6 +15,8 @@ def geocode(key, address, time=None, options=None, google_api_key=None):
     """
 
     location, (lat, lng) = geocoders.GoogleV3(api_key=google_api_key).geocode(address)
+        time:   A unix timestamp representing the desired UTC time of
+                the forecast.
 
     url = build_url(key, lat, lng, time, options)
 
@@ -29,6 +31,8 @@ def geocode_async(key, address, callback, time=None, options=None, google_api_ke
     """
 
     location, (lat, lng) = geocoders.GoogleV3(api_key=google_api_key).geocode(address)
+        time:   A unix timestamp representing the desired UTC time of
+                the forecast.
 
     url = build_url(key, lat, lng, time, options)
 
