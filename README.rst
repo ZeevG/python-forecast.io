@@ -6,7 +6,7 @@ Forecast.io Wrapper
 
 This is a wrapper for the forecast.io API. It allows you to get the weather for any location, now, in the past, or future.
 
-The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it’s very simple).
+The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it's very simple).
 
 
 Installation
