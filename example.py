@@ -1,15 +1,19 @@
-import forecastio
 import datetime
+import forecastio
 
 
 def main():
-
+    """
+    Run load_forecast() with the given lat, lng, and time arguments.
+    """
 
     api_key = "YOUR API KEY"
-    lat = -31.967819
-    lng = 115.87718
 
-    forecast = forecastio.load_forecast(api_key, lat, lng)
+    lat  = -31.967819
+    lng  = 115.87718
+    time = datetime.datetime.now()
+
+    forecast = forecastio.load_forecast(api_key, lat, lng, time=time)
 
     print forecast.hourly().data[0].temperature
     print "===========Hourly Data========="
