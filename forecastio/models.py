@@ -81,20 +81,20 @@ class ForecastioDataPoint(UnicodeMixin):
         self.d = d
 
         try:
-            self.time = datetime.datetime.fromtimestamp(int(d['time']))
+            self.time = datetime.datetime.utcfromtimestamp(int(d['time']))
             self.utime = d['time']
         except:
             pass
 
         try:
             sr_time = int(d['sunriseTime'])
-            self.sunriseTime = datetime.datetime.fromtimestamp(sr_time)
+            self.sunriseTime = datetime.datetime.utcfromtimestamp(sr_time)
         except:
             self.sunriseTime = None
 
         try:
             ss_time = int(d['sunsetTime'])
-            self.sunsetTime = datetime.datetime.fromtimestamp(ss_time)
+            self.sunsetTime = datetime.datetime.utcfromtimestamp(ss_time)
         except:
             self.sunsetTime = None
 
