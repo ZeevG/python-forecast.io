@@ -1,5 +1,4 @@
 import requests
-import time as Time
 import threading
 
 from forecastio.models import Forecast
@@ -14,7 +13,8 @@ def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
         inLat:  The latitude of the forecast
         inLong: The longitude of the forecast
         time:   A datetime.datetime object representing the desired time of
-                the forecast
+               the forecast. If no timezone is present, the API assumes local
+               time at the provided latitude and longitude.
         units:  A string of the preferred units of measurement, "auto" id
                 default. also us,ca,uk,si is available
         lazy:   Defaults to false.  The function will only request the json
@@ -26,7 +26,7 @@ def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
         url = 'https://api.forecast.io/forecast/%s/%s,%s' \
               '?units=%s' % (key, lat, lng, units,)
     else:
-        url_time = str(int(Time.mktime(time.timetuple())))
+        url_time = time.replace(microsecond=0).isoformat()  # API returns 400 for microseconds
         url = 'https://api.forecast.io/forecast/%s/%s,%s,%s' \
               '?units=%s' % (key, lat, lng, url_time,
               units,)
@@ -43,7 +43,7 @@ def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
 
 def manual(requestURL, callback=None):
     """
-        This fuction is used by load_forecast OR by users to manually
+        This function is used by load_forecast OR by users to manually
         construct the URL for an API call.
     """
 
