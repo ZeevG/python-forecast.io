@@ -9,13 +9,15 @@ def main():
 
     api_key = "YOUR API KEY"
 
-    lat  = -31.967819
-    lng  = 115.87718
-    time = datetime.datetime.now()
+    lat = -31.967819
+    lng = 115.87718
+    time = datetime.datetime(2015, 2, 27, 6, 0, 0)
 
     forecast = forecastio.load_forecast(api_key, lat, lng, time=time)
 
-    print forecast.hourly().data[0].temperature
+    print "===========Currently Data========="
+    print forecast.currently()
+
     print "===========Hourly Data========="
     by_hour = forecast.hourly()
     print "Hourly Summary: %s" % (by_hour.summary)
