@@ -76,7 +76,7 @@ Parameters:
 	- **key** - Your API key from https://developer.forecast.io/
 	- **latitude** - The latitude of the location for the forecast
 	- **longitude** - The longitude of the location for the forecast
-	- **time** - (optional) A datetime object for the forecast either in the past or future
+	- **time** - (optional) A datetime object for the forecast either in the past or future - see How Timezones Work below for the details on how timezones are handled in this library.
 	- **units** - (optional) A string of the preferred units of measurement, "auto" is the default. "us","ca","uk","si" are also available. See the API Docs https://developer.forecast.io/docs/v2 for exactly what each unit means.
 	- **lazy** - (optional) Defaults to `false`.  If `true` the function will request the json data as it is needed. Results in more requests, but maybe a faster response time.
 	- **callback** - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
@@ -159,3 +159,40 @@ Data points have many attributes, but **not all of them are always available**. 
 		- A numerical value between 0 and 1 (inclusive) representing the probability of precipitation occurring at the given time.
 
 For a full list of ForecastioDataPoint attributes and attribute descriptions, take a look at the forecast.io data point documentation (https://developer.forecast.io/docs/v2#data-points)
+
+----------------------------------------------------
+
+
+How Timezones Work
+------------------
+Requests with a naive datetime (no time zone specified) will correspond to the supplied time in the requesting location. If a timezone aware datetime object is supplied, the supplied time will be in the associated timezone.
+
+Returned times eg the time parameter on the currently DataPoint are always in UTC time even if making a request with a timezone. If you want to manually convert to the locations local time, you can use the `offset` and `timezone` attributes of the forecast object.
+
+Typically, would would want to do something like this:
+
+.. code-block:: python
+
+  # Amsterdam
+  lat  = 52.370235
+  lng  = 4.903549
+  current_time = datetime(2015, 2, 27, 6, 0, 0)
+  forecast = forecastio.load_forecast(api_key, lat, lng, time=current_time)
+
+
+Be caerful, things can get confusing when doing something like the below. Given that I'm looking up the weather in Amsterdam (+2) while I'm in Perth, Australia (+8).
+
+.. code-block:: python
+
+  # Amsterdam
+  lat  = 52.370235
+  lng  = 4.903549
+
+  current_time = datetime.datetime.now()
+
+  forecast = forecastio.load_forecast(api_key, lat, lng, time=current_time)
+
+
+The result is actually a request for the weather in the future in Amsterdam (by 6 hours). In addition, since all returned times are in UTC, it will report a time two hours behind the *local* time in Amsterdam.
+
+If you're doing lots of queries in the past/future in different locations, the best approach is to consistently use UTC time. Keep in mind ``datetime.datetime.utcnow()`` is **still a naive datetime**. To use proper timezone aware datetime objects you will need to use a library like `pytz <http://pytz.sourceforge.net/>`_ 
