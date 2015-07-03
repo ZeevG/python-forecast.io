@@ -1,6 +1,7 @@
 import os
 import unittest
 import responses
+import requests
 
 import forecastio
 
@@ -32,6 +33,30 @@ class EndToEnd(unittest.TestCase):
             self.api_key, self.lat, self.lng
         )
         self.assertEqual(forecast.response.status_code, 200)
+
+    def test_invalid_key(self):
+        self.api_key = 'not a real key'
+
+        try:
+            forecastio.load_forecast(
+                self.api_key, self.lat, self.lng
+            )
+
+            self.assertTrue(False)  # the previous line should throw an exception
+        except requests.exceptions.HTTPError as e:
+            self.assertEqual(str(e), '403 Client Error: Forbidden')
+
+    def test_invalid_param(self):
+        self.lat = ''
+
+        try:
+            forecastio.load_forecast(
+                self.api_key, self.lat, self.lng
+            )
+
+            self.assertTrue(False)  # the previous line should throw an exception
+        except requests.exceptions.HTTPError as e:
+            self.assertEqual(str(e), '400 Client Error: Bad Request')
 
 
 class BasicFunctionality(unittest.TestCase):
