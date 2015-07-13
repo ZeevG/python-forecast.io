@@ -104,7 +104,7 @@ class ForecastioDataPoint(UnicodeMixin):
         except KeyError:
             raise PropertyUnavailable(
                 "Property '{}' is not valid"
-                " or is not avilable for this forecast".format(name)
+                " or is not available for this forecast".format(name)
             )
 
     def __unicode__(self):
@@ -122,7 +122,7 @@ class Alert(UnicodeMixin):
         except KeyError:
             raise PropertyUnavailable(
                 "Property '{}' is not valid"
-                " or is not avilable for this forecast".format(name)
+                " or is not available for this forecast".format(name)
             )
 
     def __unicode__(self):
