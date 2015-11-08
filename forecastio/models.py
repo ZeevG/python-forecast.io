@@ -102,10 +102,7 @@ class ForecastioDataPoint(UnicodeMixin):
         try:
             return self.d[name]
         except KeyError:
-            raise PropertyUnavailable(
-                "Property '{}' is not valid"
-                " or is not available for this forecast".format(name)
-            )
+            return None
 
     def __unicode__(self):
         return '<ForecastioDataPoint instance: ' \
@@ -120,10 +117,7 @@ class Alert(UnicodeMixin):
         try:
             return self.json[name]
         except KeyError:
-            raise PropertyUnavailable(
-                "Property '{}' is not valid"
-                " or is not available for this forecast".format(name)
-            )
+            return None
 
     def __unicode__(self):
         return '<Alert instance: {0} at {1}>'.format(self.title, self.time)
