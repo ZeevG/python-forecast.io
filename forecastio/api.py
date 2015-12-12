@@ -56,7 +56,7 @@ def manual(requestURL, callback=None):
 
 
 def get_forecast(requestURL):
-    forecastio_reponse = requests.get(requestURL)
+    forecastio_reponse = requests.get(requestURL, timeout=10)
     forecastio_reponse.raise_for_status()
 
     json = forecastio_reponse.json()
