@@ -44,7 +44,7 @@ class EndToEnd(unittest.TestCase):
 
             self.assertTrue(False)  # the previous line should throw an exception
         except requests.exceptions.HTTPError as e:
-            self.assertEqual(str(e), '403 Client Error: Forbidden')
+            self.assertTrue(str(e).startswith('400 Client Error: Bad Request'))
 
     def test_invalid_param(self):
         self.lat = ''
@@ -56,7 +56,7 @@ class EndToEnd(unittest.TestCase):
 
             self.assertTrue(False)  # the previous line should throw an exception
         except requests.exceptions.HTTPError as e:
-            self.assertEqual(str(e), '400 Client Error: Bad Request')
+            self.assertTrue(str(e).startswith('400 Client Error: Bad Request'))
 
 
 class BasicFunctionality(unittest.TestCase):
