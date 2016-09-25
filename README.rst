@@ -1,10 +1,10 @@
 *******************
-Forecast.io Wrapper
+Dark Sky Wrapper
 *******************
 
 .. image:: https://travis-ci.org/ZeevG/python-forecast.io.svg?branch=master
 
-This is a wrapper for the forecast.io API. It allows you to get the weather for any location, now, in the past, or future.
+This is a wrapper for the Dark Sky (formerly forecast.io) API. It allows you to get the weather for any location, now, in the past, or future.
 
 The Basic Use section covers enough to get you going. I suggest also reading the source if you want to know more about how to use the wrapper or what its doing (it's very simple).
 
@@ -21,13 +21,13 @@ Simple!
 Requirements
 ############
 
-- You need an API key to use it (http://developer.forecast.io). Don't worry a key is free.
+- You need an API key to use it (https://darksky.net/dev/). Don't worry a key is free.
 
 
 Basic Use
 #########
 
-Although you don't need to know anything about the forecast.io API to use this module, their docs are available at http://developer.forecast.io
+Although you don't need to know anything about the Dark Sky API to use this module, their docs are available at https://darksky.net/dev/.
 
 To use the wrapper:
 
@@ -73,11 +73,11 @@ Advanced
 This makes an API request and returns a **Forecast** object (see below).
 
 Parameters:
-	- **key** - Your API key from https://developer.forecast.io/
+	- **key** - Your API key from https://darksky.net/dev/.
 	- **latitude** - The latitude of the location for the forecast
 	- **longitude** - The longitude of the location for the forecast
 	- **time** - (optional) A datetime object for the forecast either in the past or future - see How Timezones Work below for the details on how timezones are handled in this library.
-	- **units** - (optional) A string of the preferred units of measurement, "auto" is the default. "us","ca","uk","si" are also available. See the API Docs https://developer.forecast.io/docs/v2 for exactly what each unit means.
+	- **units** - (optional) A string of the preferred units of measurement, "auto" is the default. "us","ca","uk","si" are also available. See the API Docs (https://darksky.net/dev/docs/forecast) for exactly what each unit means.
 	- **lazy** - (optional) Defaults to `false`.  If `true` the function will request the json data as it is needed. Results in more requests, but maybe a faster response time.
 	- **callback** - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
 
@@ -86,7 +86,7 @@ Parameters:
 
 *function* forecastio.manual(url)
 ----------------------------------------------------
-This function allows manual creation of the URL for the Forecast.io API request.  This method won't be required often but can be used to take advantage of new or beta features of the API which this wrapper does not support yet. Returns a **Forecast** object (see below).
+This function allows manual creation of the URL for the Dark Sky API request.  This method won't be required often but can be used to take advantage of new or beta features of the API which this wrapper does not support yet. Returns a **Forecast** object (see below).
 
 Parameters:
         - **url** - The URL which the wrapper will attempt build a forecast from.
@@ -98,7 +98,7 @@ Parameters:
 *class* forecastio.models.Forecast
 ------------------------------------
 
-The **Forecast** object, it contains both weather data and the HTTP response from forecast.io
+The **Forecast** object, it contains both weather data and the HTTP response from Dark Sky
 
 **Attributes**
 	- **response**
@@ -128,7 +128,7 @@ The **Forecast** object, it contains both weather data and the HTTP response fro
 
 Contains data about a forecast over time.
 
-**Attributes** *(descriptions taken from the forecast.io website)*
+**Attributes** *(descriptions taken from the darksky.net website)*
 	- **summary**
 		- A human-readable text summary of this data block.
 	- **icon**
@@ -146,7 +146,7 @@ Contains data about a forecast at a particular time.
 
 Data points have many attributes, but **not all of them are always available**. Some commonly used ones are:
 
-**Attributes** *(descriptions taken from the forecast.io website)*
+**Attributes** *(descriptions taken from the darksky.net website)*
 	-	**summary**
 		- A human-readable text summary of this data block.
 	-	**icon**
@@ -158,7 +158,7 @@ Data points have many attributes, but **not all of them are always available**. 
 	-	**precipProbability**
 		- A numerical value between 0 and 1 (inclusive) representing the probability of precipitation occurring at the given time.
 
-For a full list of ForecastioDataPoint attributes and attribute descriptions, take a look at the forecast.io data point documentation (https://developer.forecast.io/docs/v2#data-points)
+For a full list of ForecastioDataPoint attributes and attribute descriptions, take a look at the Dark Sky data point documentation (https://darksky.net/dev/docs/response#data-point)
 
 ----------------------------------------------------
 
