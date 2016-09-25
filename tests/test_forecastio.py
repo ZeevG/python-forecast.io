@@ -44,7 +44,7 @@ class EndToEnd(unittest.TestCase):
 
             self.assertTrue(False)  # the previous line should throw an exception
         except requests.exceptions.HTTPError as e:
-            self.assertEqual(str(e), '403 Client Error: Forbidden')
+            self.assertTrue(str(e).startswith('400 Client Error: Bad Request'))
 
     def test_invalid_param(self):
         self.lat = ''
@@ -56,14 +56,14 @@ class EndToEnd(unittest.TestCase):
 
             self.assertTrue(False)  # the previous line should throw an exception
         except requests.exceptions.HTTPError as e:
-            self.assertEqual(str(e), '400 Client Error: Bad Request')
+            self.assertTrue(str(e).startswith('400 Client Error: Bad Request'))
 
 
 class BasicFunctionality(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -145,7 +145,7 @@ class ForecastsWithAlerts(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test_with_alerts.json').read(),
                       status=200,
