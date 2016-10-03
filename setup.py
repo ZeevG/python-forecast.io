@@ -16,7 +16,7 @@ def read(fname):
 
 setup(
     name="python-forecastio",
-    version="1.3.4",
+    version="1.3.5",
     author="Ze'ev Gilovitz",
     author_email="zeev.gil@gmail.com",
     description=("A thin Python Wrapper for the Dark Sky (formerly Forecast.io) weather API"),
