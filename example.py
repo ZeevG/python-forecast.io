@@ -1,3 +1,9 @@
+# An example of the Python Wrapper for the Forecast.io weather API.
+#
+# Copyright (c) 2013-2015 Ze'ev Gilovitz <zeev.gil@gmail.com>
+#
+# Licensed under BSD. All rights reserved.
+#
 import datetime
 import forecastio
 
@@ -15,22 +21,22 @@ def main():
 
     forecast = forecastio.load_forecast(api_key, lat, lng, time=time)
 
-    print "===========Currently Data========="
-    print forecast.currently()
+    print("===========Currently Data=========")
+    print(forecast.currently())
 
-    print "===========Hourly Data========="
+    print("===========Hourly Data=========")
     by_hour = forecast.hourly()
-    print "Hourly Summary: %s" % (by_hour.summary)
+    print("Hourly Summary: %s" % (by_hour.summary))
 
     for hourly_data_point in by_hour.data:
-        print hourly_data_point
+        print(hourly_data_point)
 
-    print "===========Daily Data========="
+    print("===========Daily Data=========")
     by_day = forecast.daily()
-    print "Daily Summary: %s" % (by_day.summary)
+    print("Daily Summary: %s" % (by_day.summary))
 
     for daily_data_point in by_day.data:
-        print daily_data_point
+        print(daily_data_point)
 
 
 if __name__ == "__main__":
