@@ -1,4 +1,8 @@
 import sys
+try:
+    from urllib import urlencode  # python 2
+except:
+    from urllib.parse import urlencode  # python 3
 
 
 class UnicodeMixin(object):
@@ -18,22 +22,15 @@ class PropertyUnavailable(AttributeError):
     pass
 
 
-def build_url(key, lat, lng, datetime=None, options=None):
+def build_url(key, lat, lng, time=None, url_params=None):
 
-    if datetime is None:
-        url = "https://api.forecast.io/forecast/{0}/{1},{2}".format(
-            key, lat, lng
-        )
-    else:
-        url = "https://api.forecast.io/forecast/{0}/{1},{2},{3}".format(
-            key, lat, lng, datetime
-        )
+    url = "https://api.forecast.io/forecast/{key}/{lat},{lng}"
+    if time is not None:
+        url += ",{time}"
+        time = time.replace(microsecond=0).isoformat()  # API returns 400 if we include microseconds
 
     # Generate Query String
-    if options:
-        querystring = '&'.join(
-            [dictKey+'='+options[dictKey] for dictKey in options]
-        )
-        url += '?'+querystring
+    if url_params:
+        url += "?{params}"
 
-    return url
+    return url.format(key=key, lat=lat, lng=lng, time=time, params=urlencode(url_params))
