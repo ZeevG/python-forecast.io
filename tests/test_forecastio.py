@@ -1,10 +1,62 @@
+import os
 import unittest
 import responses
+from datetime import datetime
+import requests
 
 import forecastio
 
 from nose.tools import raises
 
+
+class EndToEnd(unittest.TestCase):
+
+    def setUp(self):
+        self.api_key = os.environ.get("FORECASTIO_API_KEY")
+
+        self.lat = 52.370235
+        self.lng = 4.903549
+
+        self.time = datetime(2015, 2, 27, 6, 0, 0)
+
+    def test_with_time(self):
+
+        forecast = forecastio.load(
+            self.api_key, self.lat,
+            self.lng, time=self.time
+        )
+        self.assertEqual(forecast.response.status_code, 200)
+
+    def test_without_time(self):
+
+        forecast = forecastio.load(
+            self.api_key, self.lat, self.lng
+        )
+        self.assertEqual(forecast.response.status_code, 200)
+
+    def test_invalid_key(self):
+        self.api_key = 'not a real key'
+
+        try:
+            forecastio.load(
+                self.api_key, self.lat, self.lng
+            )
+
+            self.assertTrue(False)  # the previous line should throw an exception
+        except requests.exceptions.HTTPError as e:
+            self.assertTrue(e.response.status_code == 404)
+
+    def test_invalid_param(self):
+        self.lat = ''
+
+        try:
+            forecastio.load(
+                self.api_key, self.lat, self.lng
+            )
+
+            self.assertTrue(False)  # the previous line should throw an exception
+        except requests.exceptions.HTTPError as e:
+            self.assertTrue(e.response.status_code == 404)
 
 class BasicFunctionality(unittest.TestCase):
 
@@ -20,7 +72,7 @@ class BasicFunctionality(unittest.TestCase):
         api_key = "foo"
         lat = 50.0
         lng = 10.0
-        self.fc = forecastio.load_forecast(api_key, lat, lng)
+        self.fc = forecastio.load(api_key, lat, lng)
 
         self.assertEqual(responses.calls[0].request.url, URL)
 
@@ -104,7 +156,7 @@ class UsingOptions(unittest.TestCase):
         lat = 50.0
         lng = 10.0
         options = {'units': 'auto'}
-        self.fc = forecastio.load_forecast(api_key, lat, lng, options=options)
+        self.fc = forecastio.load(api_key, lat, lng, **options)
 
         # Check the expected url was called.
         self.assertEqual(responses.calls[0].request.url, URL)
@@ -118,7 +170,7 @@ class Geocode(unittest.TestCase):
 
     @responses.activate
     def test_geocoding(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0"
+        URL = "https://api.forecast.io/forecast/foo/48.7904472,11.4978895"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -148,7 +200,7 @@ class ForecastsWithAlerts(unittest.TestCase):
         api_key = "foo"
         lat = 50.0
         lng = 10.0
-        self.fc = forecastio.load_forecast(api_key, lat, lng)
+        self.fc = forecastio.load(api_key, lat, lng)
 
     def test_alerts_length(self):
         alerts = self.fc.alerts()
@@ -199,14 +251,6 @@ class ForecastsWithAlerts(unittest.TestCase):
             first_alert.time,
             1402133400
         )
-
-
-class BasicWithCallback(unittest.TestCase):
-    pass
-    """
-    Would like to test this in the future
-    Not sure how to handle mocking responses in a new thread yet
-    """
 
 
 class BasicManualURL(unittest.TestCase):

@@ -1,5 +1,4 @@
-import forecastio
-import datetime
+import forecast
 
 API_KEY = "YOUR_KEY"
 
@@ -26,13 +25,13 @@ def data_with_lat_lng():
     lat = -31.967819
     lng = 115.87718
     print("Forecast with Lat/Lng Specified")
-    return forecastio.load_forecast(API_KEY, lat, lng)
+    return forecast.load(API_KEY, lat, lng)
 
 
 def data_with_address():
     address = 'New York City, NY'
     print("A forecast generated with geocoding.")
-    return forecastio.load_forecast(API_KEY, address=address) 
+    return forecast.geocode(API_KEY, address=address)
 
 
 if __name__ == "__main__":
