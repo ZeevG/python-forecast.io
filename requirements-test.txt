@@ -2,4 +2,4 @@ nose
 coverage
 coveralls
 responses
-geopy>=0.99,<=1.0
+geopy>=1.11.0,<=2.0
