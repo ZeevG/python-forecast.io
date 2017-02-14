@@ -24,7 +24,7 @@ class PropertyUnavailable(AttributeError):
 
 def build_url(key, lat, lng, time=None, url_params=None):
 
-    url = "https://api.forecast.io/forecast/{key}/{lat},{lng}"
+    url = "https://api.darksky.net/forecast/{key}/{lat},{lng}"
     if time is not None:
         url += ",{time}"
         time = time.replace(microsecond=0).isoformat()  # API returns 400 if we include microseconds

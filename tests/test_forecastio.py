@@ -62,7 +62,7 @@ class BasicFunctionality(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -145,7 +145,7 @@ class UsingOptions(unittest.TestCase):
 
     @responses.activate
     def test_units(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto&lang=es"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -155,7 +155,7 @@ class UsingOptions(unittest.TestCase):
         api_key = "foo"
         lat = 50.0
         lng = 10.0
-        options = {'units': 'auto'}
+        options = {'units': 'auto', 'lang': 'es'}
         self.fc = forecastio.load(api_key, lat, lng, **options)
 
         # Check the expected url was called.
@@ -170,7 +170,7 @@ class Geocode(unittest.TestCase):
 
     @responses.activate
     def test_geocoding(self):
-        URL = "https://api.forecast.io/forecast/foo/48.7904472,11.4978895"
+        URL = "https://api.darksky.net/forecast/foo/48.7904472,11.4978895"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -190,7 +190,7 @@ class ForecastsWithAlerts(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.forecast.io/forecast/foo/50.0,10.0"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test_with_alerts.json').read(),
                       status=200,
