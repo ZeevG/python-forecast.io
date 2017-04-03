@@ -1,11 +1,16 @@
+import forecastio
+
 import os
 import unittest
 import responses
-from datetime import datetime
 import requests
+try:
+    import urlparse
+except:
+    import urllib.parse as urlparse
 
-import forecastio
 
+from datetime import datetime
 from nose.tools import raises
 
 
@@ -143,7 +148,7 @@ class BasicFunctionality(unittest.TestCase):
 class UsingOptions(unittest.TestCase):
 
     @responses.activate
-    def test_units(self):
+    def test_options(self):
         URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto&lang=es"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
@@ -158,7 +163,14 @@ class UsingOptions(unittest.TestCase):
         self.fc = forecastio.load(api_key, lat, lng, **options)
 
         # Check the expected url was called.
-        self.assertEqual(responses.calls[0].request.url, URL)
+        actualUrl = urlparse.urlparse(responses.calls[0].request.url)
+        expectedUrl = urlparse.urlparse(URL)
+        self.assertEqual(expectedUrl, actualUrl)
+
+        expectedPath = URL.split("?")[0]
+        actualPath = responses.calls[0].request.url.split("?")[0]
+
+
 
         # Check the resulting forecast object is accessible
         fc_cur = self.fc.currently()
