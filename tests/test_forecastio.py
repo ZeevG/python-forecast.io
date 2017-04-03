@@ -165,7 +165,10 @@ class UsingOptions(unittest.TestCase):
         # Check the expected url was called.
         actualUrl = urlparse.urlparse(responses.calls[0].request.url)
         expectedUrl = urlparse.urlparse(URL)
-        self.assertEqual(expectedUrl, actualUrl)
+        self.assertEqual(expectedUrl.path, actualUrl.path)
+
+        # Check the query params are correct
+        self.assertEqual(set(expectedUrl.query.split("&")), set(actualUrl.query.split("&")))
 
         # Check the resulting forecast object is accessible
         fc_cur = self.fc.currently()
