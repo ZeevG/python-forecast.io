@@ -167,11 +167,6 @@ class UsingOptions(unittest.TestCase):
         expectedUrl = urlparse.urlparse(URL)
         self.assertEqual(expectedUrl, actualUrl)
 
-        expectedPath = URL.split("?")[0]
-        actualPath = responses.calls[0].request.url.split("?")[0]
-
-
-
         # Check the resulting forecast object is accessible
         fc_cur = self.fc.currently()
         self.assertEqual(fc_cur.temperature, 55.81)
