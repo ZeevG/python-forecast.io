@@ -105,14 +105,13 @@ class BasicFunctionality(unittest.TestCase):
         daily = self.fc.daily()
         self.assertEqual(daily.data[0].temperatureMin, 50.73)
 
-    @unittest.skip("Skipping untill timezone problems are sorted")
     def test_datapoint_string_repr(self):
 
         currently = self.fc.currently()
 
         self.assertEqual(
             "{}".format(currently),
-            "<ForecastioDataPoint instance: Overcast at 2014-05-28 16:27:39>"
+            "<ForecastioDataPoint instance: Overcast at 2014-05-28 08:27:39>"
         )
 
     def test_datablock_string_repr(self):
@@ -226,7 +225,6 @@ class ForecastsWithAlerts(unittest.TestCase):
             "125159E830C0CA.VEFNPWVEF.8faae06d42ba631813492a6a6eae41bc"
         )
 
-    @unittest.skip("Skipping untill timezone problems are sorted")
     def test_alert_time(self):
         alerts = self.fc.alerts()
         first_alert = alerts[0]
