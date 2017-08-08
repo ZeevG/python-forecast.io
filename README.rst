@@ -78,6 +78,7 @@ Parameters:
 	- **longitude** - The longitude of the location for the forecast
 	- **time** - (optional) A datetime object for the forecast either in the past or future - see How Timezones Work below for the details on how timezones are handled in this library.
 	- **units** - (optional) A string of the preferred units of measurement, "auto" is the default. "us","ca","uk","si" are also available. See the API Docs (https://darksky.net/dev/docs/forecast) for exactly what each unit means.
+  - **lang** - (optional) A string of the prefered language, "en" is the default. See the API Docs (https://darksky.net/dev/docs/forecast) for all available languages.
 	- **lazy** - (optional) Defaults to `false`.  If `true` the function will request the json data as it is needed. Results in more requests, but maybe a faster response time.
 	- **callback** - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
 
