@@ -5,7 +5,7 @@ from forecastio.models import Forecast
 
 
 def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
-                  callback=None):
+                  callback=None, lang="en"):
     """
         This function builds the request url and loads some or all of the
         needed json depending on lazy is True
@@ -20,16 +20,17 @@ def load_forecast(key, lat, lng, time=None, units="auto", lazy=False,
         lazy:   Defaults to false.  The function will only request the json
                 data as it is needed. Results in more requests, but
                 probably a faster response time (I haven't checked)
+        lang:   The language of the forecast
     """
 
     if time is None:
         url = 'https://api.darksky.net/forecast/%s/%s,%s' \
-              '?units=%s' % (key, lat, lng, units,)
+              '?units=%s&lang=%s' % (key, lat, lng, units, lang,)
     else:
         url_time = time.replace(microsecond=0).isoformat()  # API returns 400 for microseconds
         url = 'https://api.darksky.net/forecast/%s/%s,%s,%s' \
-              '?units=%s' % (key, lat, lng, url_time,
-              units,)
+              '?units=%s&lang=%s' % (key, lat, lng, url_time,
+              units, lang,)
 
     if lazy is True:
         baseURL = "%s&exclude=%s" % (url,
