@@ -27,6 +27,15 @@ class EndToEnd(unittest.TestCase):
         )
         self.assertEqual(forecast.response.status_code, 200)
 
+    def test_with_language(self):
+        forecast = forecastio.load_forecast(
+            self.api_key, self.lat, self.lng, time=self.time, lang="de"
+        )
+        # Unfortunately the API doesn't return anything which
+        # states the language of the response. This is the best we can do...
+        self.assertEqual(forecast.response.status_code, 200)
+        self.assertTrue(forecast.response.url.find("lang=de") >= 0)
+
     def test_without_time(self):
 
         forecast = forecastio.load_forecast(
