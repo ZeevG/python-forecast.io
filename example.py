@@ -1,4 +1,3 @@
-import datetime
 import forecastio
 
 
@@ -11,10 +10,8 @@ def main():
 
     lat = -31.967819
     lng = 115.87718
-    lang = "de"
-    time = datetime.datetime.now()
 
-    forecast = forecastio.load_forecast(api_key, lat, lng, lang=lang, time=time)
+    forecast = forecastio.load_forecast(api_key, lat, lng)
 
     print "===========Currently Data========="
     print forecast.currently()
