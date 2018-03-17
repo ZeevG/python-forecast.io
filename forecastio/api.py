@@ -25,12 +25,11 @@ def load_forecast(key, lat, lng, time=None, units="auto", lang="en", lazy=False,
 
     if time is None:
         url = 'https://api.darksky.net/forecast/%s/%s,%s' \
-              '?units=%s&lang=%s' % (key, lat, lng, units, lang,)
+              '?units=%s&lang=%s' % (key, lat, lng, units, lang)
     else:
         url_time = time.replace(microsecond=0).isoformat()  # API returns 400 for microseconds
         url = 'https://api.darksky.net/forecast/%s/%s,%s,%s' \
-              '?units=%s&lang=%s' % (key, lat, lng, url_time,
-              units, lang,)
+              '?units=%s&lang=%s' % (key, lat, lng, url_time, units, lang)
 
     if lazy is True:
         baseURL = "%s&exclude=%s" % (url,
