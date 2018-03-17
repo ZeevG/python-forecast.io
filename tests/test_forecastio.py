@@ -19,20 +19,18 @@ class EndToEnd(unittest.TestCase):
 
         self.time = datetime(2015, 2, 27, 6, 0, 0)
 
-        self.lang = "en"
-
     def test_with_time(self):
 
         forecast = forecastio.load_forecast(
             self.api_key, self.lat,
-            self.lng, time=self.time, lang=self.lang
+            self.lng, time=self.time
         )
         self.assertEqual(forecast.response.status_code, 200)
 
     def test_without_time(self):
 
         forecast = forecastio.load_forecast(
-            self.api_key, self.lat, self.lng, lang=self.lang
+            self.api_key, self.lat, self.lng
         )
         self.assertEqual(forecast.response.status_code, 200)
 
@@ -41,7 +39,7 @@ class EndToEnd(unittest.TestCase):
 
         try:
             forecastio.load_forecast(
-                self.api_key, self.lat, self.lng, lang=self.lang
+                self.api_key, self.lat, self.lng
             )
 
             self.assertTrue(False)  # the previous line should throw an exception
@@ -53,7 +51,7 @@ class EndToEnd(unittest.TestCase):
 
         try:
             forecastio.load_forecast(
-                self.api_key, self.lat, self.lng, lang=self.lang
+                self.api_key, self.lat, self.lng
             )
 
             self.assertTrue(False)  # the previous line should throw an exception
@@ -65,7 +63,7 @@ class BasicFunctionality(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto&lang=en"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test.json').read(),
                       status=200,
@@ -75,8 +73,7 @@ class BasicFunctionality(unittest.TestCase):
         api_key = "foo"
         lat = 50.0
         lng = 10.0
-        lang = "en"
-        self.fc = forecastio.load_forecast(api_key, lat, lng, lang=lang)
+        self.fc = forecastio.load_forecast(api_key, lat, lng)
 
         self.assertEqual(responses.calls[0].request.url, URL)
 
@@ -148,7 +145,7 @@ class ForecastsWithAlerts(unittest.TestCase):
 
     @responses.activate
     def setUp(self):
-        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto"
+        URL = "https://api.darksky.net/forecast/foo/50.0,10.0?units=auto&lang=en"
         responses.add(responses.GET, URL,
                       body=open('tests/fixtures/test_with_alerts.json').read(),
                       status=200,
