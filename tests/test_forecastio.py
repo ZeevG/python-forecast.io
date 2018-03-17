@@ -44,7 +44,7 @@ class EndToEnd(unittest.TestCase):
 
             self.assertTrue(False)  # the previous line should throw an exception
         except requests.exceptions.HTTPError as e:
-            self.assertTrue(str(e).startswith('400 Client Error: Bad Request'))
+            self.assertTrue(str(e).startswith('403 Client Error: Forbidden'))
 
     def test_invalid_param(self):
         self.lat = ''
