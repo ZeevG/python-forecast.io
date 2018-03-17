@@ -31,6 +31,9 @@ class Forecast(UnicodeMixin):
     def daily(self):
         return self._forcastio_data('daily')
 
+    def timezone(self):
+        return self.json['timezone']
+
     def offset(self):
         return self.json['offset']
 

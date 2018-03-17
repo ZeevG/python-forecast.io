@@ -168,7 +168,7 @@ How Timezones Work
 ------------------
 Requests with a naive datetime (no time zone specified) will correspond to the supplied time in the requesting location. If a timezone aware datetime object is supplied, the supplied time will be in the associated timezone.
 
-Returned times eg the time parameter on the currently DataPoint are always in UTC time even if making a request with a timezone. If you want to manually convert to the locations local time, you can use the `offset` and `timezone` attributes of the forecast object.
+Returned times eg the time parameter on the currently DataPoint are always in UTC time even if making a request with a timezone. If you want to manually convert to the locations local time, you can use the `timezone` and `offset` methods of the forecast object.
 
 Typically, would would want to do something like this:
 
