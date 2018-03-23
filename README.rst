@@ -81,6 +81,7 @@ Parameters:
 	- **units** - (optional) A string of the preferred units of measurement, "auto" is the default. "us","ca","uk","si" are also available. See the API Docs (https://darksky.net/dev/docs/forecast) for exactly what each unit means.
 	- **lazy** - (optional) Defaults to `false`.  If `true` the function will request the json data as it is needed. Results in more requests, but maybe a faster response time.
 	- **callback** - (optional) Pass a function to be used as a callback. If used, load_forecast() will use an asynchronous HTTP call and **will not return the forecast object directly**, instead it will be passed to the callback function. Make sure it can accept it.
+	- **timeout** - (optional) The timeout in seconds. (Defaults to 3 seconds)
 
 ----------------------------------------------------
 
@@ -196,4 +197,4 @@ Be caerful, things can get confusing when doing something like the below. Given 
 
 The result is actually a request for the weather in the future in Amsterdam (by 6 hours). In addition, since all returned times are in UTC, it will report a time two hours behind the *local* time in Amsterdam.
 
-If you're doing lots of queries in the past/future in different locations, the best approach is to consistently use UTC time. Keep in mind ``datetime.datetime.utcnow()`` is **still a naive datetime**. To use proper timezone aware datetime objects you will need to use a library like `pytz <http://pytz.sourceforge.net/>`_ 
+If you're doing lots of queries in the past/future in different locations, the best approach is to consistently use UTC time. Keep in mind ``datetime.datetime.utcnow()`` is **still a naive datetime**. To use proper timezone aware datetime objects you will need to use a library like `pytz <http://pytz.sourceforge.net/>`_
