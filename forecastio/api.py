@@ -3,9 +3,11 @@ import threading
 
 from forecastio.models import Forecast
 
+TIMEOUT = 3.0
+
 
 def load_forecast(key, lat, lng, time=None, units="auto", lang="en", lazy=False,
-                  callback=None):
+                  callback=None, timeout=3.0):
     """
         This function builds the request url and loads some or all of the
         needed json depending on lazy is True
@@ -21,7 +23,10 @@ def load_forecast(key, lat, lng, time=None, units="auto", lang="en", lazy=False,
         lazy:   Defaults to false.  The function will only request the json
                 data as it is needed. Results in more requests, but
                 probably a faster response time (I haven't checked)
+        timeout:The timeout in seconds. Defaults to 3 seconds.
     """
+
+    TIMEOUT = timeout
 
     if time is None:
         url = 'https://api.darksky.net/forecast/%s/%s,%s' \
@@ -56,7 +61,7 @@ def manual(requestURL, callback=None):
 
 
 def get_forecast(requestURL):
-    forecastio_reponse = requests.get(requestURL)
+    forecastio_reponse = requests.get(requestURL, TIMEOUT)
     forecastio_reponse.raise_for_status()
 
     json = forecastio_reponse.json()
