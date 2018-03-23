@@ -3,11 +3,11 @@ import threading
 
 from forecastio.models import Forecast
 
-TIMEOUT = 3.0
+CONST_TIMEOUT = 3.0
 
 
-def load_forecast(key, lat, lng, time=None, units="auto", lang="en", lazy=False,
-                  callback=None, timeout=3.0):
+def load_forecast(key, lat, lng, time=None, units="auto", lang="en",
+                  lazy=False, callback=None, timeout=CONST_TIMEOUT):
     """
         This function builds the request url and loads some or all of the
         needed json depending on lazy is True
@@ -25,9 +25,6 @@ def load_forecast(key, lat, lng, time=None, units="auto", lang="en", lazy=False,
                  probably a faster response time (I haven't checked)
         timeout: The timeout in seconds. Defaults to 3 seconds.
     """
-
-    TIMEOUT = timeout
-
     if time is None:
         url = 'https://api.darksky.net/forecast/%s/%s,%s' \
               '?units=%s&lang=%s' % (key, lat, lng, units, lang)
@@ -43,25 +40,25 @@ def load_forecast(key, lat, lng, time=None, units="auto", lang="en", lazy=False,
     else:
         baseURL = url
 
-    return manual(baseURL, callback=callback)
+    return manual(baseURL, callback=callback, timeout=timeout)
 
 
-def manual(requestURL, callback=None):
+def manual(requestURL, callback=None, timeout=CONST_TIMEOUT):
     """
         This function is used by load_forecast OR by users to manually
         construct the URL for an API call.
     """
 
     if callback is None:
-        return get_forecast(requestURL)
+        return get_forecast(requestURL, timeout)
     else:
         thread = threading.Thread(target=load_async,
-                                  args=(requestURL, callback))
+                                  args=(requestURL, callback, timeout))
         thread.start()
 
 
-def get_forecast(requestURL):
-    forecastio_reponse = requests.get(requestURL, TIMEOUT)
+def get_forecast(requestURL, timeout=CONST_TIMEOUT):
+    forecastio_reponse = requests.get(requestURL, timeout=timeout)
     forecastio_reponse.raise_for_status()
 
     json = forecastio_reponse.json()
@@ -70,5 +67,5 @@ def get_forecast(requestURL):
     return Forecast(json, forecastio_reponse, headers)
 
 
-def load_async(url, callback):
-    callback(get_forecast(url))
+def load_async(url, callback, timeout=CONST_TIMEOUT):
+    callback(get_forecast(url, timeout=timeout))
