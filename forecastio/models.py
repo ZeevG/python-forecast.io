@@ -107,7 +107,7 @@ class ForecastioDataPoint(UnicodeMixin):
         if 'd' not in vars(self):
             raise AttributeError
         try:
-            return getattr(self.d, name)
+            return self.d[name]
         except KeyError:
             raise PropertyUnavailable(
                 "Property '{}' is not valid"
@@ -127,7 +127,7 @@ class Alert(UnicodeMixin):
         if 'json' not in vars(self):
             raise AttributeError
         try:
-            return getattr(self.json, name)
+            return self.json[name]
         except KeyError:
             raise PropertyUnavailable(
                 "Property '{}' is not valid"
