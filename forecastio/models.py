@@ -72,6 +72,17 @@ class ForecastioDataBlock(UnicodeMixin):
 
         self.data = [ForecastioDataPoint(datapoint)
                      for datapoint in d.get('data', [])]
+        
+    def __getattr__(self, name):
+        if 'd' not in vars(self):
+            raise AttributeError
+        try:
+            return getattr(self.d, name)
+        except KeyError:
+            raise PropertyUnavailable(
+                "Property '{}' is not valid"
+                " or is not available for this forecast".format(name)
+            )
 
     def __unicode__(self):
         return '<ForecastioDataBlock instance: ' \
@@ -110,6 +121,17 @@ class ForecastioDataPoint(UnicodeMixin):
 class Alert(UnicodeMixin):
     def __init__(self, json):
         self.json = json
+
+    def __getattr__(self, name):
+        if 'json' not in vars(self):
+            raise AttributeError
+        try:
+            return getattr(self.json, name)
+        except KeyError:
+            raise PropertyUnavailable(
+                "Property '{}' is not valid"
+                " or is not available for this forecast".format(name)
+            )
 
     def __unicode__(self):
         return '<Alert instance: {0} at {1}>'.format(self.title, self.time)
