@@ -72,17 +72,6 @@ class ForecastioDataBlock(UnicodeMixin):
 
         self.data = [ForecastioDataPoint(datapoint)
                      for datapoint in d.get('data', [])]
-        
-    def __getattr__(self, name):
-        if 'd' not in vars(self):
-            raise AttributeError
-        try:
-            return getattr(self.d, name)
-        except KeyError:
-            raise PropertyUnavailable(
-                "Property '{}' is not valid"
-                " or is not available for this forecast".format(name)
-            )
 
     def __unicode__(self):
         return '<ForecastioDataBlock instance: ' \
@@ -113,6 +102,18 @@ class ForecastioDataPoint(UnicodeMixin):
         except:
             self.sunsetTime = None
 
+                    
+    def __getattr__(self, name):
+        if 'd' not in vars(self):
+            raise AttributeError
+        try:
+            return getattr(self.d, name)
+        except KeyError:
+            raise PropertyUnavailable(
+                "Property '{}' is not valid"
+                " or is not available for this forecast".format(name)
+            )
+            
     def __unicode__(self):
         return '<ForecastioDataPoint instance: ' \
                '%s at %s>' % (self.summary, self.time,)
